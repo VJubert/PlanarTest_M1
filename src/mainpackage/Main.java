@@ -10,7 +10,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		file_to_graph(args[0]);
-		calcul_cycle(g);
+		if(!g.calcul_cycle()){
+			System.out.println("true");
+			System.out.println("Pas de cycle => Arbre => Toujours planaire");
+		}
 		calcul_face();
 		boolean une_seul_face=false;
 		while(has_frag(g)){
@@ -65,11 +68,6 @@ public class Main {
 	}
 
 	private static void calcul_face() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void calcul_cycle(Graphe g2) {
 		// TODO Auto-generated method stub
 		
 	}
