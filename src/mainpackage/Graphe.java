@@ -65,6 +65,7 @@ public class Graphe {
 	}
 
 	public boolean calcul_cycle() {
+		return false;
 		// TODO Auto-generated method stub
 		
 	}
