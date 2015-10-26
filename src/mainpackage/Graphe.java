@@ -77,6 +77,7 @@ public class Graphe {
 		ArrayDeque<Integer> q=new ArrayDeque<Integer>();
 		for (int i = 0; i < g.getNb_sommets(); i++) {
 			g.prop_sommets[i][PERE]=-1;
+			g.prop_sommets[i][ETAT]=NONATTEINT;
 		}
 		g.prop_sommets[dep][ETAT]=TRAITE;
 		g.prop_sommets[dep][DISTANCE]=0;
@@ -96,9 +97,23 @@ public class Graphe {
 			g.prop_sommets[u][ETAT]=TRAITE;
 		}
 	}
+	public static void parcours_profondeur(Graphe g, int dep) {
+		for (int i = 0; i < g.nb_sommets; i++) {
+			g.prop_sommets[i][ETAT]=NONATTEINT;
+			g.prop_sommets[i][PERE]=-1;
+		}
+		visiter(g,dep);
+	}
 
-	public static void parcours_profondeur(int dep) {
-		// TODO : implementer parcours profondeur
+	private static void visiter(Graphe g, int u) {
+		g.prop_sommets[u][ETAT]=ATTEINT;
+		for (Integer v : g.voisins(u)) {
+			if(g.prop_sommets[v][ETAT]==NONATTEINT) {
+				g.prop_sommets[v][PERE]=u;
+				visiter(g,v);
+			}
+		}
+		g.prop_sommets[u][ETAT]=TRAITE;		
 	}
 
 	public boolean calcul_cycle() {
