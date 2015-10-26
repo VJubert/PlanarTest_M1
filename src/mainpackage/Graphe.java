@@ -1,18 +1,36 @@
 package mainpackage;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public class Graphe {
+	private static final int NBPROP=3;
+	
+	private static final int PERE=0;
+	private static final int DISTANCE=1;
+	private static final int ETAT=2;
+
+	private static final int NONATTEINT=0;
+	private static final int ATTEINT=1;
+	private static final int TRAITE=2;
+	
 	private Map<Integer, List<Integer>> graphe;
 	private int nb_sommets;
 	private List<Integer> cycle;
 	private int[][] prop_sommets;
 
+	public Graphe(int n) {
+		graphe = new HashMap<Integer, List<Integer>>();
+		prop_sommets=new int[n][NBPROP];
+		nb_sommets=n;
+	}
+
 	public Graphe(int n, Map<Integer, List<Integer>> g) {
-		prop_sommets = new int[n][2];
-		// 0 c'est le pere pour parcours
-		// 1 c'est la distance au depart (pour parcours)
+		prop_sommets = new int[n][NBPROP];
 		if (g != null)
 			graphe = g;
 		nb_sommets = n;
@@ -55,9 +73,28 @@ public class Graphe {
 		}
 		return s;
 	}
-
-	public static void parcours_largeur(int dep) {
-		// TODO : implementer parcours largeur
+	public static void parcours_largeur(Graphe g, int dep) {
+		ArrayDeque<Integer> q=new ArrayDeque<Integer>();
+		for (int i = 0; i < g.getNb_sommets(); i++) {
+			g.prop_sommets[i][PERE]=-1;
+		}
+		g.prop_sommets[dep][ETAT]=TRAITE;
+		g.prop_sommets[dep][DISTANCE]=0;
+		q.add(dep);
+		int u;
+		while(!q.isEmpty()){
+			u=q.peek();
+			for (Integer v : g.voisins(u)) {
+				if(g.prop_sommets[v][ETAT]==NONATTEINT){
+					g.prop_sommets[v][ETAT]=ATTEINT;
+					g.prop_sommets[v][DISTANCE]=g.prop_sommets[u][1]+1;
+					g.prop_sommets[v][PERE]=u;
+					q.add(v);
+				}
+			}
+			q.poll();
+			g.prop_sommets[u][ETAT]=TRAITE;
+		}
 	}
 
 	public static void parcours_profondeur(int dep) {
@@ -69,4 +106,14 @@ public class Graphe {
 		// TODO Auto-generated method stub
 		
 	}
+	public void ajouterVoisins(int sommets, int... voisin){
+		List<Integer> voisins=graphe.get(sommets);
+		if(voisins==null){
+			voisins=new ArrayList<Integer>();
+		}
+		for (int i : voisin) {
+			voisins.add(i);
+		}
+	}
+	
 }

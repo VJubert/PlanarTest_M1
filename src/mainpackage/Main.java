@@ -76,5 +76,22 @@ public class Main {
 		// TODO Auto-generated method stub
 		
 	}
+	private static void generation_graphe(){
+		g=new Graphe(8);
+		g.ajouterVoisins(0, 1,2,3,4);
 
+		g.ajouterVoisins(1, 0,2,5,6);
+
+		g.ajouterVoisins(2, 0,1,3,6);
+		
+		g.ajouterVoisins(3, 0,2,4,7);
+
+		g.ajouterVoisins(4, 0,3,5,7);
+
+		g.ajouterVoisins(5, 1,4,6,7);
+
+		g.ajouterVoisins(6, 1,2,5,7);
+		
+		g.ajouterVoisins(7, 3,4,5,6);
+	}
 }
