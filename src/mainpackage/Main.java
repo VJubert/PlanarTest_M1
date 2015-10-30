@@ -8,7 +8,7 @@ public class Main {
 	private static Graphe g;
 	private static List<Fragment> list_frag=new ArrayList<Fragment>();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		file_to_graph(args[0]);
 		if(!g.calcul_cycle()){
 			System.out.println("true");

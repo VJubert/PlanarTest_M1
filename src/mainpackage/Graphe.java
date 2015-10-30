@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 public class Graphe {
 	private static final int NBPROP=3;
@@ -125,6 +124,7 @@ public class Graphe {
 		List<Integer> voisins=graphe.get(sommets);
 		if(voisins==null){
 			voisins=new ArrayList<Integer>();
+			graphe.put(sommets, voisins);
 		}
 		for (int i : voisin) {
 			voisins.add(i);
