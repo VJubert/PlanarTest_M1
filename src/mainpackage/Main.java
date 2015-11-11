@@ -13,7 +13,7 @@ public class Main {
 
 	public static void main(String[] args) {		
 		file_to_graph(args[0]);
-		if(!g.calcul_cycle()){
+		if(!g.calculCycle(g,g.getPremierSommet())){
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 		}

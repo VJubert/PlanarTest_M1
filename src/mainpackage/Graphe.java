@@ -39,6 +39,10 @@ public class Graphe {
 		return nb_sommets;
 	}
 
+	public int getPremierSommet(){
+		return (Integer) this.graphe.keySet().toArray()[0];
+	}
+
 	public List<Integer> getCycle() {
 		return cycle;
 	}
@@ -115,10 +119,29 @@ public class Graphe {
 		g.prop_sommets[u][ETAT]=TRAITE;		
 	}
 
-	public boolean calcul_cycle() {
+	public boolean calculCycle(Graphe g, int u) {
+		g.prop_sommets[u][ETAT]=ATTEINT;
+		cycle.add(u);
+		for (Integer v : g.voisins(u)) {
+			if(g.prop_sommets[v][PERE] != u){//exclure le père du parcours
+				if(g.prop_sommets[v][ETAT] == ATTEINT){
+					cycle.add(v);//a ce stade, le même sommet doit etre présent deux fois dans la liste
+					//je vais tronquer la liste cycleTmp et mettre dans cycle ce qu'il y a entre ces deux sommets
+					int firstIndex = cycle.indexOf(v);
+					int lastIndex = cycle.lastIndexOf(v);
+					cycle = cycle.subList(firstIndex,lastIndex+1);
+
+					return true;
+				}
+				if(g.prop_sommets[v][ETAT]==NONATTEINT) {
+					g.prop_sommets[v][PERE]=u;
+					visiter(g,v);
+				}
+			}
+		}
+		g.prop_sommets[u][ETAT]=TRAITE;
+		cycle.clear();
 		return false;
-		// TODO Auto-generated method stub
-		
 	}
 	public void ajouterVoisins(int sommets, int... voisin){
 		List<Integer> voisins=graphe.get(sommets);
