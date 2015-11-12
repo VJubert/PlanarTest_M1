@@ -12,10 +12,13 @@ public class Main {
 	private static List<Fragment> list_frag=new ArrayList<Fragment>();
 
 	public static void main(String[] args) {		
-		file_to_graph(args[0]);
+		//file_to_graph(args[0]);
+		generation_graphe();
 		if(!g.calculCycle(g,g.getPremierSommet())){
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
+		}else{//il y a un cycle, je l'affiche
+			System.out.println(g.toStringCycle());
 		}
 		calcul_face();
 		boolean une_seul_face=false;
@@ -122,15 +125,21 @@ public class Main {
 		g.ajouterVoisins(1, 0,2,5,6);
 
 		g.ajouterVoisins(2, 0,1,3,6);
-		
-		g.ajouterVoisins(3, 0,2,4,7);
 
+		g.ajouterVoisins(3, 0,2,4,7);
 		g.ajouterVoisins(4, 0,3,5,7);
 
 		g.ajouterVoisins(5, 1,4,6,7);
 
 		g.ajouterVoisins(6, 1,2,5,7);
-		
+
 		g.ajouterVoisins(7, 3,4,5,6);
+
+//		g = new Graphe(5);
+//		g.ajouterVoisins(0, 1);
+//		g.ajouterVoisins(1, 2,3);
+//		g.ajouterVoisins(2, 1,4);
+//		g.ajouterVoisins(3, 1,4);
+//		g.ajouterVoisins(4, 2,3);
 	}
 }
