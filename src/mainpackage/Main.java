@@ -10,6 +10,7 @@ public class Main {
 	
 	private static Graphe g;
 	private static List<Fragment> list_frag=new ArrayList<Fragment>();
+	private static List<Face> list_face=new ArrayList<Face>();
 
 	public static void main(String[] args) {		
 		//file_to_graph(args[0]);
@@ -20,7 +21,7 @@ public class Main {
 		}else{//il y a un cycle, je l'affiche
 			System.out.println(g.toStringCycle());
 		}
-		calcul_face();
+		init_face();
 		boolean une_seul_face=false;
 		while(has_frag(g)){
 			calcul_frag(g);
@@ -46,6 +47,12 @@ public class Main {
 		}
 		System.out.println("true");
 		afficherCartePlanaire();
+	}
+
+	private static void init_face() {
+		list_face.clear();
+		list_face.add(new Face(g.getCycle()));
+		list_face.add(new Face(g.getCycle()));		
 	}
 
 	private static void afficherCartePlanaire() {
@@ -83,15 +90,15 @@ public class Main {
 		Scanner fileScanner, lineScanner;
 		String ligne, voisins;
 		int nbSommets, numLigne, numSommet, numVoisin;
-		nbSommets = 0;
 		numLigne = 1;
 		try {
 			fileScanner = new Scanner(new File(fileName));
 			while(fileScanner.hasNextLine()) {
 				ligne = fileScanner.nextLine();
-				if(numLigne == 1)
+				if(numLigne == 1){
 					nbSommets = Integer.parseInt(ligne);
-				else {
+					g=new Graphe(nbSommets);
+				} else {
 					// Récupération du numéro du sommet.
 					lineScanner = new Scanner(ligne);
 					lineScanner.useDelimiter(":");
