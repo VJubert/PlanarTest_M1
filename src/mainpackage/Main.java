@@ -80,15 +80,15 @@ public class Main {
 		Scanner fileScanner, lineScanner;
 		String ligne, voisins;
 		int nbSommets, numLigne, numSommet, numVoisin;
-		nbSommets = 0;
 		numLigne = 1;
 		try {
 			fileScanner = new Scanner(new File(fileName));
 			while(fileScanner.hasNextLine()) {
 				ligne = fileScanner.nextLine();
-				if(numLigne == 1)
+				if(numLigne == 1){
 					nbSommets = Integer.parseInt(ligne);
-				else {
+					g=new Graphe(nbSommets);
+				} else {
 					// Récupération du numéro du sommet.
 					lineScanner = new Scanner(ligne);
 					lineScanner.useDelimiter(":");
