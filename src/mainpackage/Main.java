@@ -10,6 +10,7 @@ public class Main {
 	
 	private static Graphe g;
 	private static List<Fragment> list_frag=new ArrayList<Fragment>();
+	private static List<Face> list_face=new ArrayList<Face>();
 
 	public static void main(String[] args) {		
 		file_to_graph(args[0]);
@@ -17,7 +18,7 @@ public class Main {
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 		}
-		calcul_face();
+		init_face();
 		boolean une_seul_face=false;
 		while(has_frag(g)){
 			calcul_frag(g);
@@ -43,6 +44,12 @@ public class Main {
 		}
 		System.out.println("true");
 		afficherCartePlanaire();
+	}
+
+	private static void init_face() {
+		list_face.clear();
+		list_face.add(new Face(g.getCycle()));
+		list_face.add(new Face(g.getCycle()));		
 	}
 
 	private static void afficherCartePlanaire() {
