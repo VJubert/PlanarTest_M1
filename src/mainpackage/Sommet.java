@@ -1,21 +1,22 @@
 package mainpackage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Sommet {
-	
+
 	private int num_sommet;
 	private boolean appartenance_cycle;
 	private Sommet pere;
 	private Etat etat;
 	private List<Sommet> voisins;
-	
+	private int distance;
+
 	public Sommet(int num_sommet) {
-		super();
 		this.num_sommet = num_sommet;
-		etat=Etat.Non_Atteint;
-		voisins=new ArrayList<Sommet>();
+		etat = Etat.Non_Atteint;
+		voisins = new ArrayList<Sommet>();
 	}
 
 	public int getNum_sommet() {
@@ -39,25 +40,45 @@ public class Sommet {
 	}
 
 	public void setPere(Sommet pere) {
-		this.pere = pere;
+		if (pere != null)
+			this.pere = pere;
 	}
 
 	public void setEtat(Etat etat) {
 		this.etat = etat;
 	}
-	public void cleanProperties(){
-		pere=null;
-		etat=Etat.Non_Atteint;
+
+	public void cleanProperties() {
+		pere = null;
+		etat = Etat.Non_Atteint;
+		distance = -1;
 	}
-	public void ajouterVoisins(Sommet s){
+
+	public void ajouterVoisins(Sommet s) {
 		voisins.add(s);
 	}
 
 	public List<Sommet> getVoisins() {
 		return voisins;
 	}
+
+	public int getDistance() {
+		return distance;
+	}
+
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
 	
-	
-	
+	@Override
+	public String toString() {
+		String s=num_sommet+" [";
+		for (Sommet sommet : voisins) {
+			s+= sommet.getNum_sommet()+", ";
+		}
+		s+="]";
+		return s;
+		
+	}
 
 }
