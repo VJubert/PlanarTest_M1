@@ -124,7 +124,9 @@ public class Graphe {
 		g.prop_sommets[u][ETAT]=TRAITE;		
 	}
 
-	public boolean calculCycle(Graphe g, int u) { // /!\ la méthode ne fonctionne pas si le premier sommet n'est pas 0 ! Je pense que ce n'est pas la seule à ne pas fonctionner dans ce cas
+	public boolean calculCycle(Graphe g, int u) { 
+		// /!\ la méthode ne fonctionne pas si le premier sommet n'est pas 0 !
+		//Je pense que ce n'est pas la seule à ne pas fonctionner dans ce cas
 
 		g.prop_sommets[u][ETAT]=ATTEINT;
 		cycle.add(u);
