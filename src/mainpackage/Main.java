@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {		
 		//file_to_graph(args[0]);
 		generation_graphe();
-		if(!g.calculCycle(g,g.getPremierSommet())){
+		if(!g.calculCycle(g,0)){
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 		}else{//il y a un cycle, je l'affiche

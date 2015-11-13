@@ -128,6 +128,7 @@ public class Graphe {
 //		g.prop_sommets[u][ETAT] = TRAITE;
 //		cycle.clear();
 //		return false;
+		return true;
 	}
 
 	public void ajouterVoisins(int sommet, int... voisin) {
