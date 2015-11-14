@@ -13,11 +13,11 @@ public class Main {
 	private static List<Face> list_face=new ArrayList<Face>();
 
 	public static void main(String[] args) {		
-		//file_to_graph(args[0]);
-		generation_graphe();
+		file_to_graph(args[0]);
 		if(!g.calculCycle(g,0)){
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
+			return ;
 		}else{//il y a un cycle, je l'affiche
 			System.out.println(g.toStringCycle());
 		}
@@ -56,7 +56,7 @@ public class Main {
 	}
 
 	private static void afficherCartePlanaire() {
-		// TODO Auto-generated method stub
+		list_face.forEach(System.out::println);
 		
 	}
 
@@ -123,30 +123,5 @@ public class Main {
 				numLigne++;
 			}
 		} catch(IOException ioException) {}
-	}
-
-	private static void generation_graphe(){
-		g=new Graphe(8);
-		g.ajouterVoisins(0, 1,2,3,4);
-
-		g.ajouterVoisins(1, 0,2,5,6);
-
-		g.ajouterVoisins(2, 0,1,3,6);
-
-		g.ajouterVoisins(3, 0,2,4,7);
-		g.ajouterVoisins(4, 0,3,5,7);
-
-		g.ajouterVoisins(5, 1,4,6,7);
-
-		g.ajouterVoisins(6, 1,2,5,7);
-
-		g.ajouterVoisins(7, 3,4,5,6);
-
-//		g = new Graphe(5);
-//		g.ajouterVoisins(0, 1);
-//		g.ajouterVoisins(1, 2,3);
-//		g.ajouterVoisins(2, 1,4);
-//		g.ajouterVoisins(3, 1,4);
-//		g.ajouterVoisins(4, 2,3);
 	}
 }
