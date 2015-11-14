@@ -93,41 +93,43 @@ public class Graphe {
 		s.setEtat(Etat.Traite);
 	}
 
-	//TODO : NE PAS PRENDRE DE GRAPHE DANS LES PARAMETRES !!!!!!!!!!!!!!
+	// TODO : NE PAS PRENDRE DE GRAPHE DANS LES PARAMETRES !!!!!!!!!!!!!!
 	public boolean calculCycle(Graphe g, int u) {
-//		// /!\ la méthode ne fonctionne pas si le premier sommet n'est pas 0 !
-//		// Je pense que ce n'est pas la seule à ne pas fonctionner dans ce cas
-//
-//		g.prop_sommets[u][ETAT] = ATTEINT;
-//		cycle.add(u);
-//		List<Integer> voisins = new ArrayList<Integer>();
-//		voisins = g.voisins(u);
-//		if (voisins.contains(g.prop_sommets[u][PERE])) {
-//			int indexOfPere = voisins.indexOf(g.prop_sommets[u][PERE]);
-//			voisins.remove(indexOfPere);// exclure le père du parcours
-//		}
-//		for (Integer v : voisins) {
-//
-//			if (g.prop_sommets[v][ETAT] == ATTEINT) {
-//				cycle.add(v);// a ce stade, le même sommet doit etre présent
-//								// deux fois dans la liste
-//				// je vais tronquer la liste cycle et y laisse uniquement ce
-//				// qu'il y a entre ces deux sommets
-//				int firstIndex = cycle.indexOf(v);
-//				int lastIndex = cycle.lastIndexOf(v);
-//				cycle = cycle.subList(firstIndex, lastIndex + 1);
-//
-//				return true;
-//			}
-//			if (g.prop_sommets[v][ETAT] == NONATTEINT) {
-//				g.prop_sommets[v][PERE] = u;
-//				return calculCycle(g, v);
-//			}
-//
-//		}
-//		g.prop_sommets[u][ETAT] = TRAITE;
-//		cycle.clear();
-//		return false;
+		// // /!\ la méthode ne fonctionne pas si le premier sommet n'est pas 0
+		// !
+		// // Je pense que ce n'est pas la seule à ne pas fonctionner dans ce
+		// cas
+		//
+		// g.prop_sommets[u][ETAT] = ATTEINT;
+		// cycle.add(u);
+		// List<Integer> voisins = new ArrayList<Integer>();
+		// voisins = g.voisins(u);
+		// if (voisins.contains(g.prop_sommets[u][PERE])) {
+		// int indexOfPere = voisins.indexOf(g.prop_sommets[u][PERE]);
+		// voisins.remove(indexOfPere);// exclure le père du parcours
+		// }
+		// for (Integer v : voisins) {
+		//
+		// if (g.prop_sommets[v][ETAT] == ATTEINT) {
+		// cycle.add(v);// a ce stade, le même sommet doit etre présent
+		// // deux fois dans la liste
+		// // je vais tronquer la liste cycle et y laisse uniquement ce
+		// // qu'il y a entre ces deux sommets
+		// int firstIndex = cycle.indexOf(v);
+		// int lastIndex = cycle.lastIndexOf(v);
+		// cycle = cycle.subList(firstIndex, lastIndex + 1);
+		//
+		// return true;
+		// }
+		// if (g.prop_sommets[v][ETAT] == NONATTEINT) {
+		// g.prop_sommets[v][PERE] = u;
+		// return calculCycle(g, v);
+		// }
+		//
+		// }
+		// g.prop_sommets[u][ETAT] = TRAITE;
+		// cycle.clear();
+		// return false;
 		return true;
 	}
 
@@ -146,6 +148,19 @@ public class Graphe {
 			}
 			s.ajouterVoisins(s2);
 		}
+	}
+
+	public boolean has_frag() {
+		boolean g = false;
+		for (Sommet sommet : sommets.values()) {
+			if (!sommet.isAppartenance_cycle()) {
+				g = true;
+			}
+		}
+		if (!g)
+			return false;
+		else
+			return true;
 	}
 
 }
