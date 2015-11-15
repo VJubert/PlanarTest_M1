@@ -176,9 +176,6 @@ public class Graphe {
 	}
 
 	public void majmarquage() {
-		System.out.println("maj marquage");
-		System.out.println(arete.values().size());
-		arete.values().forEach(System.out::println);
 		int n=cycle.size();
 		Sommet s,s2;
 		for(int i=0;i<n-1;i++){
@@ -186,9 +183,6 @@ public class Graphe {
 			s2=cycle.get(i+1);
 			arete.put(new Couple<Sommet, Sommet>(s,s2), true);
 		}
-		System.out.println("maj marquage");
-		System.out.println(arete.values().size());
-		arete.values().forEach(System.out::println);
 	}
 
 }
