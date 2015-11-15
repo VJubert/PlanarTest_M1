@@ -151,16 +151,14 @@ public class Graphe {
 	}
 
 	public boolean has_frag() {
+		//fausse
 		boolean g = false;
 		for (Sommet sommet : sommets.values()) {
 			if (!sommet.isAppartenance_cycle()) {
 				g = true;
 			}
 		}
-		if (!g)
-			return false;
-		else
-			return true;
+		return !g;
 	}
 
 }
