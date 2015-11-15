@@ -19,6 +19,7 @@ public class Main {
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 			return ;
 		}else{//il y a un cycle, je l'affiche
+			g.majmarquage();
 			System.out.println("il y a un cycle !");
 			System.out.println(g.toStringCycle());
 		}

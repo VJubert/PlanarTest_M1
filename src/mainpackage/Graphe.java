@@ -111,8 +111,7 @@ public class Graphe {
 		return calculCycleRec(u);
 	}
 
-	public boolean calculCycleRec(Sommet u) {
-
+	private boolean calculCycleRec(Sommet u) {
 		u.setEtat(Etat.Atteint);
 		cycle.add(u);
 		List<Sommet> voisins = new ArrayList<Sommet>();
@@ -174,6 +173,22 @@ public class Graphe {
 				return true;
 		}
 		return false;
+	}
+
+	public void majmarquage() {
+		System.out.println("maj marquage");
+		System.out.println(arete.values().size());
+		arete.values().forEach(System.out::println);
+		int n=cycle.size();
+		Sommet s,s2;
+		for(int i=0;i<n-1;i++){
+			s=cycle.get(i);
+			s2=cycle.get(i+1);
+			arete.put(new Couple<Sommet, Sommet>(s,s2), true);
+		}
+		System.out.println("maj marquage");
+		System.out.println(arete.values().size());
+		arete.values().forEach(System.out::println);
 	}
 
 }
