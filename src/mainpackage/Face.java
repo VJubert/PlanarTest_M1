@@ -1,6 +1,6 @@
 package mainpackage;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Face {
@@ -9,7 +9,7 @@ public class Face {
 
 	public Face(List<Sommet> sommets) {
 		super();
-		this.sommets = sommets;
+		this.sommets = new ArrayList<Sommet>(sommets);
 	}
 
 	public List<Sommet> getSommets() {

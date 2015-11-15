@@ -12,6 +12,7 @@ public class Graphe {
 	private int nb_sommets;
 	private Map<Integer, Sommet> sommets;
 	private List<Sommet> cycle;
+	private Map<Couple<Sommet,Sommet>,Boolean> arete;
 
 	public List<Sommet> getCycle() {
 		return cycle;
@@ -20,11 +21,13 @@ public class Graphe {
 	public Graphe(int n) {
 		nb_sommets = n;
 		sommets = new HashMap<Integer, Sommet>();
+		arete=new HashMap<Couple<Sommet, Sommet>, Boolean>();
 	}
 
 	public Graphe(int n, Map<Integer, Sommet> g) {
 		nb_sommets = n;
 		sommets = g;
+		arete=new HashMap<Couple<Sommet, Sommet>, Boolean>();
 	}
 
 	public int getNb_sommets() {
@@ -47,18 +50,12 @@ public class Graphe {
 	}
 
 	public String toStringCycle() {
-//		String s = "";
-//		for (Sommet so : sommets.values()) {
-//			if (so.isAppartenance_cycle())
-//				s += so + System.getProperty("line.separator");
-//		}
-//		return s;
 		String s = "";
 
 		for(Sommet u : getCycle()){
-			s += u.getNum_sommet() + System.getProperty("line.separator");
+			s += u.getNum_sommet() +  " ";
 		}
-		return s;
+		return s+System.getProperty("line.separator");
 	}
 
 
@@ -167,18 +164,16 @@ public class Graphe {
 				sommets.put(i, s2);
 			}
 			s.ajouterVoisins(s2);
+			arete.put(new Couple<Sommet,Sommet>(s,s2), false);
 		}
 	}
 
 	public boolean has_frag() {
-		//fausse
-		boolean g = false;
-		for (Sommet sommet : sommets.values()) {
-			if (!sommet.isAppartenance_cycle()) {
-				g = true;
-			}
+		for (boolean b : arete.values()) {
+			if(!b)
+				return true;
 		}
-		return !g;
+		return false;
 	}
 
 }
