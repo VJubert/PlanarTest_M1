@@ -14,11 +14,12 @@ public class Main {
 
 	public static void main(String[] args) {		
 		file_to_graph(args[0]);
-		if(!g.calculCycle(g,0)){
+		if(!g.calculCycle(g.getPremierSommet())){
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 			return ;
 		}else{//il y a un cycle, je l'affiche
+			System.out.println("il y a un cycle !");
 			System.out.println(g.toStringCycle());
 		}
 		init_face();
