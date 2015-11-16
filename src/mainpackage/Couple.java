@@ -13,8 +13,13 @@ public class Couple<K,V> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		if(left.hashCode()>right.hashCode()){
 		result = prime * result + ((left == null) ? 0 : left.hashCode());
 		result = prime * result + ((right == null) ? 0 : right.hashCode());
+		} else {
+			result = prime * result + ((right == null) ? 0 : right.hashCode());	
+			result = prime * result + ((left == null) ? 0 : left.hashCode());		
+		}
 		return result;
 	}
 	@Override
@@ -26,17 +31,10 @@ public class Couple<K,V> {
 		if (!(obj instanceof Couple))
 			return false;
 		Couple other = (Couple) obj;
-		if (left == null) {
-			if (other.left != null)
-				return false;
-		} else if (!left.equals(other.left))
+		if(left ==null || right==null || other.left == null || other.right ==null)
 			return false;
-		if (right == null) {
-			if (other.right != null)
-				return false;
-		} else if (!right.equals(other.right))
-			return false;
-		return true;
+		return (left.equals(other.left) && right.equals(other.right)) || (left.equals(other.right) && right.equals(other.left));
+		
 	}
 	public Couple(K left, V right) {
 		super();
