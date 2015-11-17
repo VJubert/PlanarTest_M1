@@ -68,17 +68,7 @@ public class Main {
 
 	}
 
-	private static void calcul_face_admissible(Fragment frag) {
-		// TODO Auto-generated method stub
-
-	}
-
 	private static void calcul_frag(Graphe g2) {
-		// TODO Auto-generated method stub
-
-	}
-
-	private static void calcul_face() {
 		// TODO Auto-generated method stub
 
 	}
