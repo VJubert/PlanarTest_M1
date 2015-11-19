@@ -9,23 +9,23 @@ import java.util.Scanner;
 public class Main {
 
 	private static Graphe g;
+	private static Graphe h;
 	private static List<Fragment> list_frag = new ArrayList<Fragment>();
 	private static List<Face> list_face = new ArrayList<Face>();
 
 	public static void main(String[] args) {
 		file_to_graph(args[0]);
-		if (!g.calculCycle(g.getPremierSommet())) {
+		if (!g.calculCycle(g.getPremierSommet(),h)) {
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 			return;
 		} else {// il y a un cycle, je l'affiche
-			g.majmarquage();
 			System.out.println("il y a un cycle !");
 			System.out.println(g.toStringCycle());
 		}
 		init_face();
 		boolean une_seul_face = false;
-		while (g.has_frag()) {
+		while (g.has_frag(h)) {
 			calcul_frag(g);
 			une_seul_face = false;
 			for (Fragment frag : list_frag) {
@@ -86,6 +86,7 @@ public class Main {
 				if (numLigne == 1) {
 					nbSommets = Integer.parseInt(ligne);
 					g = new Graphe(nbSommets);
+					h = new Graphe(nbSommets);
 				} else {
 					// Récupération du numéro du sommet.
 					lineScanner = new Scanner(ligne);

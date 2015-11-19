@@ -18,6 +18,14 @@ public class Sommet {
 		etat = Etat.Non_Atteint;
 		voisins = new ArrayList<Sommet>();
 	}
+	
+	public boolean have_voisin(Sommet v){
+		return voisins.contains(v);
+	}
+	
+	public boolean have_voisins(){
+		return voisins.size()>0;
+	}
 
 	public int getNum_sommet() {
 		return num_sommet;
@@ -79,14 +87,6 @@ public class Sommet {
 		s+="]";
 		return s;
 		
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + num_sommet;
-		return result;
 	}
 
 	@Override

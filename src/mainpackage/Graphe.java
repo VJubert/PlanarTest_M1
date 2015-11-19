@@ -12,7 +12,6 @@ public class Graphe {
 	private int nb_sommets;
 	private Map<Integer, Sommet> sommets;
 	private List<Sommet> cycle;
-	private Map<Couple<Sommet,Sommet>,Boolean> arete;
 
 	public List<Sommet> getCycle() {
 		return cycle;
@@ -21,13 +20,11 @@ public class Graphe {
 	public Graphe(int n) {
 		nb_sommets = n;
 		sommets = new HashMap<Integer, Sommet>();
-		arete=new HashMap<Couple<Sommet, Sommet>, Boolean>();
 	}
 
 	public Graphe(int n, Map<Integer, Sommet> g) {
 		nb_sommets = n;
 		sommets = g;
-		arete=new HashMap<Couple<Sommet, Sommet>, Boolean>();
 	}
 
 	public int getNb_sommets() {
@@ -103,7 +100,8 @@ public class Graphe {
 		s.setEtat(Etat.Traite);
 	}
 
-	public boolean calculCycle(Sommet u){
+	public boolean calculCycle(Sommet u, Graphe h){
+		//TODO : ludo, faudrait ne plus utilsier la list cycle mais le graphe h
 		cycle = new ArrayList<Sommet>();
 		for (Sommet sommet : sommets.values()) {
 			sommet.cleanProperties();
@@ -163,25 +161,25 @@ public class Graphe {
 				sommets.put(i, s2);
 			}
 			s.ajouterVoisins(s2);
-			arete.put(new Couple<Sommet,Sommet>(s,s2), false);
 		}
 	}
 
-	public boolean has_frag() {
-		for (boolean b : arete.values()) {
-			if(!b)
-				return true;
+	public boolean has_frag(Graphe h) {
+		for (Sommet sommet_x : sommets.values()) {
+			for (Sommet sommet_y : sommet_x.getVoisins()) {
+				if(h.have_edge(sommet_x, sommet_y)||h.have_edge(sommet_y, sommet_x)){
+					return false;
+				}
+			}
 		}
-		return false;
+		return true;
 	}
-
-	public void majmarquage() {
-		int n=cycle.size();
-		Sommet s,s2;
-		for(int i=0;i<n-1;i++){
-			s=cycle.get(i);
-			s2=cycle.get(i+1);
-			arete.put(new Couple<Sommet, Sommet>(s,s2), true);
+	public boolean have_edge(Sommet x, Sommet y){
+		Sommet ox=sommets.get(x.getNum_sommet());
+		if(ox !=null){
+			return ox.have_voisin(y);
+		} else {
+			return false;
 		}
 	}
 
