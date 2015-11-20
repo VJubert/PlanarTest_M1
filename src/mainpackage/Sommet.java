@@ -18,13 +18,13 @@ public class Sommet {
 		etat = Etat.Non_Atteint;
 		voisins = new ArrayList<Sommet>();
 	}
-	
-	public boolean have_voisin(Sommet v){
+
+	public boolean have_voisin(Sommet v) {
 		return voisins.contains(v);
 	}
-	
-	public boolean have_voisins(){
-		return voisins.size()>0;
+
+	public boolean have_voisins() {
+		return voisins.size() > 0;
 	}
 
 	public int getNum_sommet() {
@@ -77,16 +77,16 @@ public class Sommet {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
-	
+
 	@Override
 	public String toString() {
-		String s=num_sommet+" [";
+		String s = num_sommet + " [";
 		for (Sommet sommet : voisins) {
-			s+= sommet.getNum_sommet()+", ";
+			s += sommet.getNum_sommet() + ", ";
 		}
-		s+="]";
+		s += "]";
 		return s;
-		
+
 	}
 
 	@Override
@@ -98,9 +98,7 @@ public class Sommet {
 		if (!(obj instanceof Sommet))
 			return false;
 		Sommet other = (Sommet) obj;
-		return num_sommet!=other.num_sommet;
+		return num_sommet != other.num_sommet;
 	}
-	
-	
 
 }

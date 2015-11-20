@@ -9,9 +9,9 @@ import java.util.Map;
 
 public class Graphe {
 
-	private int nb_sommets;
-	private Map<Integer, Sommet> sommets;
-	private List<Sommet> cycle;
+	protected int nb_sommets;
+	protected Map<Integer, Sommet> sommets;
+	protected List<Sommet> cycle;
 
 	public List<Sommet> getCycle() {
 		return cycle;
@@ -31,12 +31,12 @@ public class Graphe {
 		return nb_sommets;
 	}
 
-
-	public Sommet getPremierSommet(){
+	public Sommet getPremierSommet() {
 		int firstKey = (Integer) sommets.keySet().toArray()[0];
 		Sommet s = sommets.get(firstKey);
 		return s;
 	}
+
 	@Override
 	public String toString() {
 		String s = "";
@@ -49,12 +49,11 @@ public class Graphe {
 	public String toStringCycle() {
 		String s = "";
 
-		for(Sommet u : getCycle()){
-			s += u.getNum_sommet() +  " ";
+		for (Sommet u : getCycle()) {
+			s += u.getNum_sommet() + " ";
 		}
-		return s+System.getProperty("line.separator");
+		return s + System.getProperty("line.separator");
 	}
-
 
 	public void parcours_largeur(int dep) {
 		ArrayDeque<Sommet> q = new ArrayDeque<Sommet>();
@@ -100,8 +99,8 @@ public class Graphe {
 		s.setEtat(Etat.Traite);
 	}
 
-	public boolean calculCycle(Sommet u, Graphe h){
-		//TODO : ludo, faudrait ne plus utilsier la list cycle mais le graphe h
+	public boolean calculCycle(Sommet u, Graphe h) {
+		// TODO : ludo, faudrait ne plus utilsier la list cycle mais le graphe h
 		cycle = new ArrayList<Sommet>();
 		for (Sommet sommet : sommets.values()) {
 			sommet.cleanProperties();
@@ -130,7 +129,7 @@ public class Graphe {
 				int firstIndex = cycle.indexOf(v);
 				int lastIndex = cycle.lastIndexOf(v);
 				cycle = cycle.subList(firstIndex, lastIndex + 1);
-				for(Sommet w : cycle){
+				for (Sommet w : cycle) {
 					w.setAppartenance_cycle(true);
 				}
 
@@ -167,16 +166,17 @@ public class Graphe {
 	public boolean has_frag(Graphe h) {
 		for (Sommet sommet_x : sommets.values()) {
 			for (Sommet sommet_y : sommet_x.getVoisins()) {
-				if(h.have_edge(sommet_x, sommet_y)||h.have_edge(sommet_y, sommet_x)){
+				if (h.have_edge(sommet_x, sommet_y) || h.have_edge(sommet_y, sommet_x)) {
 					return false;
 				}
 			}
 		}
 		return true;
 	}
-	public boolean have_edge(Sommet x, Sommet y){
-		Sommet ox=sommets.get(x.getNum_sommet());
-		if(ox !=null){
+
+	public boolean have_edge(Sommet x, Sommet y) {
+		Sommet ox = sommets.get(x.getNum_sommet());
+		if (ox != null) {
 			return ox.have_voisin(y);
 		} else {
 			return false;

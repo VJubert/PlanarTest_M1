@@ -15,7 +15,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		file_to_graph(args[0]);
-		if (!g.calculCycle(g.getPremierSommet(),h)) {
+		if (!g.calculCycle(g.getPremierSommet(), h)) {
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 			return;
@@ -36,7 +36,7 @@ public class Main {
 						System.out.println(false);
 						return;
 					case 1:
-						plonger(frag);
+						frag.plonger(list_face.get(0));
 						une_seul_face = true;
 						break;
 					}
@@ -45,7 +45,7 @@ public class Main {
 				}
 			}
 			if (!une_seul_face) {
-				plonger(list_frag.get(0));
+				list_frag.get(0).plonger(list_face.get(0));
 			}
 		}
 		System.out.println("true");
@@ -60,11 +60,6 @@ public class Main {
 
 	private static void afficherCartePlanaire() {
 		list_face.forEach(System.out::println);
-
-	}
-
-	private static void plonger(Fragment frag) {
-		// TODO Auto-generated method stub
 
 	}
 
