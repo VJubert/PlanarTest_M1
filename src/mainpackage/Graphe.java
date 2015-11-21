@@ -182,5 +182,25 @@ public class Graphe {
 			return false;
 		}
 	}
+	
+	public boolean have_sommet(Sommet x){
+		if(sommets.get(x.getNum_sommet())!=null){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void ajouterchemin(List<Sommet> chemin) {
+		int n=chemin.size();
+		Sommet x,y;
+		for(int i=0;i<n-1;i++){
+			x=chemin.get(i);
+			y=chemin.get(i+1);
+			ajouterVoisins(x.getNum_sommet(), y.getNum_sommet());
+			ajouterVoisins(y.getNum_sommet(), x.getNum_sommet());
+		}
+		
+	}
 
 }

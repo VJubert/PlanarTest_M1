@@ -36,7 +36,7 @@ public class Main {
 						System.out.println(false);
 						return;
 					case 1:
-						frag.plonger(list_face.get(0));
+						frag.plonger(h);
 						une_seul_face = true;
 						break;
 					}
@@ -45,7 +45,7 @@ public class Main {
 				}
 			}
 			if (!une_seul_face) {
-				list_frag.get(0).plonger(list_face.get(0));
+				list_frag.get(0).plonger(h);
 			}
 		}
 		System.out.println("true");

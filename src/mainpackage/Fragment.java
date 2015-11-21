@@ -7,7 +7,7 @@ import java.util.Map;
 public class Fragment extends Graphe {
 
 	private List<Face> face;
-
+	
 	public Fragment(int n, Map<Integer, Sommet> g) {
 		super(n, g);
 	}
@@ -28,8 +28,20 @@ public class Fragment extends Graphe {
 		return res;
 	}
 
-	public void plonger(Face f) {
-
+	public Face plonger(Graphe h) {
+		Face f=face.get(0);
+		ArrayList<Sommet> s=new ArrayList<Sommet>();
+		for (Sommet sommet : f.getSommets()) {
+			if(h.have_sommet(sommet))
+				s.add(sommet);
+		}
+		List<Sommet> chemin=trouverChemin(s.get(0), s.get(1));
+		h.ajouterchemin(chemin);
+		Face f2=f.maj(chemin);
+		return f2;
+		
+		
+		
 	}
 
 	public List<Face> getFace() {
@@ -37,6 +49,7 @@ public class Fragment extends Graphe {
 	}
 
 	public int calcul_face_admissible(List<Face> list_face) {
+		face.clear();
 		Sommet s = sommets.get(0);
 		Sommet s2 = sommets.get(sommets.size() - 1);
 		ArrayList<Sommet> a = new ArrayList<Sommet>();
