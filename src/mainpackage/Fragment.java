@@ -38,10 +38,7 @@ public class Fragment extends Graphe {
 		List<Sommet> chemin=trouverChemin(s.get(0), s.get(1));
 		h.ajouterchemin(chemin);
 		Face f2=f.maj(chemin);
-		return f2;
-		
-		
-		
+		return f2;		
 	}
 
 	public List<Face> getFace() {

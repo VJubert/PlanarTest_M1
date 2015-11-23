@@ -26,7 +26,7 @@ public class Main {
 		init_face();
 		boolean une_seul_face = false;
 		while (g.has_frag(h)) {
-			calcul_frag(g);
+			calcul_frag();
 			une_seul_face = false;
 			for (Fragment frag : list_frag) {
 				if (!une_seul_face) {
@@ -36,7 +36,7 @@ public class Main {
 						System.out.println(false);
 						return;
 					case 1:
-						frag.plonger(h);
+						list_face.add(frag.plonger(h));
 						une_seul_face = true;
 						break;
 					}
@@ -45,7 +45,7 @@ public class Main {
 				}
 			}
 			if (!une_seul_face) {
-				list_frag.get(0).plonger(h);
+				list_face.add(list_frag.get(0).plonger(h));
 			}
 		}
 		System.out.println("true");
@@ -63,8 +63,9 @@ public class Main {
 
 	}
 
-	private static void calcul_frag(Graphe g2) {
-		// TODO Auto-generated method stub
+	private static void calcul_frag() {
+		list_frag.clear();
+		//TODO calcul des frags
 
 	}
 
