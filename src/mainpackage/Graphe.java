@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import javax.sound.sampled.BooleanControl;
 
 public class Graphe {
 
@@ -54,11 +59,9 @@ public class Graphe {
 		return s + System.getProperty("line.separator");
 	}
 
-	public void parcours_largeur(int dep) {
+	public void parcours_largeur(int dep, Predicate<Sommet> f) {
 		ArrayDeque<Sommet> q = new ArrayDeque<Sommet>();
-		for (Sommet sommet : sommets.values()) {
-			sommet.cleanProperties();
-		}
+		cleanProperties();
 		Sommet s_dep = sommets.get(dep);
 		s_dep.setEtat(Etat.Traite);
 		s_dep.setDistance(0);
@@ -67,11 +70,13 @@ public class Graphe {
 		while (!q.isEmpty()) {
 			peek = q.peek();
 			for (Sommet sommet : peek.getVoisins()) {
-				if (sommet.getEtat() == Etat.Non_Atteint) {
-					sommet.setEtat(Etat.Atteint);
-					sommet.setDistance(peek.getDistance() + 1);
-					sommet.setPere(peek);
-					q.add(sommet);
+				if (f.test(sommet)) {
+					if (sommet.getEtat() == Etat.Non_Atteint) {
+						sommet.setEtat(Etat.Atteint);
+						sommet.setDistance(peek.getDistance() + 1);
+						sommet.setPere(peek);
+						q.add(sommet);
+					}
 				}
 			}
 			q.poll();
@@ -79,10 +84,14 @@ public class Graphe {
 		}
 	}
 
-	public void parcours_profondeur(int dep) {
+	private void cleanProperties() {
 		for (Sommet sommet : sommets.values()) {
 			sommet.cleanProperties();
 		}
+	}
+
+	public void parcours_profondeur(int dep) {
+		cleanProperties();
 		visiter(dep);
 	}
 
@@ -101,9 +110,7 @@ public class Graphe {
 	public boolean calculCycle(Sommet u, Graphe h) {
 		// TODO : ludo, faudrait ne plus utilsier la list cycle mais le graphe h
 		cycle = new ArrayList<Sommet>();
-		for (Sommet sommet : sommets.values()) {
-			sommet.cleanProperties();
-		}
+		cleanProperties();
 		return calculCycleRec(u);
 	}
 
@@ -117,7 +124,6 @@ public class Graphe {
 			voisins.remove(indexOfPere);// exclure le père du parcours
 		}
 		for (Sommet v : voisins) {
-
 			if (v.getEtat() == Etat.Atteint) {
 				v.setAppartenance_cycle(true);
 				cycle.add(v);// a ce stade, le même sommet doit etre présent
@@ -181,9 +187,9 @@ public class Graphe {
 			return false;
 		}
 	}
-	
-	public boolean have_sommet(Sommet x){
-		if(sommets.get(x.getNum_sommet())!=null){
+
+	public boolean have_sommet(Sommet x) {
+		if (sommets.get(x.getNum_sommet()) != null) {
 			return true;
 		} else {
 			return false;
@@ -191,15 +197,15 @@ public class Graphe {
 	}
 
 	public void ajouterchemin(List<Sommet> chemin) {
-		int n=chemin.size();
-		Sommet x,y;
-		for(int i=0;i<n-1;i++){
-			x=chemin.get(i);
-			y=chemin.get(i+1);
+		int n = chemin.size();
+		Sommet x, y;
+		for (int i = 0; i < n - 1; i++) {
+			x = chemin.get(i);
+			y = chemin.get(i + 1);
 			ajouterVoisins(x.getNum_sommet(), y.getNum_sommet());
 			ajouterVoisins(y.getNum_sommet(), x.getNum_sommet());
 		}
-		
+
 	}
 
 }

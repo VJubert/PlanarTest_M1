@@ -3,6 +3,7 @@ package mainpackage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class Fragment extends Graphe {
 
@@ -17,7 +18,13 @@ public class Fragment extends Graphe {
 	}
 
 	private List<Sommet> trouverChemin(Sommet x, Sommet y) {
-		parcours_largeur(x.getNum_sommet());
+		parcours_largeur(x.getNum_sommet(),new Predicate<Sommet>() {
+			
+			@Override
+			public boolean test(Sommet arg0) {
+				return true;
+			}
+		});
 		Sommet dep = y;
 		List<Sommet> res = new ArrayList<Sommet>();
 		while (dep.equals(x)) {

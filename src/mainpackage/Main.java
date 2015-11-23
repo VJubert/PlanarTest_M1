@@ -1,10 +1,13 @@
 package mainpackage;
 
 import java.io.File;
+import java.util.regex.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.management.relation.RelationServiceNotRegisteredException;
 
 public class Main {
 
@@ -65,8 +68,8 @@ public class Main {
 
 	private static void calcul_frag() {
 		list_frag.clear();
-		//TODO calcul des frags
-
+		
+		
 	}
 
 	private static void file_to_graph(String fileName) {
