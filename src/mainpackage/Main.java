@@ -24,7 +24,7 @@ public class Main {
 			return;
 		} else {// il y a un cycle, je l'affiche
 			System.out.println("il y a un cycle !");
-			System.out.println(g.toStringCycle());
+
 		}
 		init_face();
 		boolean une_seul_face = false;
