@@ -3,6 +3,7 @@ package mainpackage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -65,7 +66,40 @@ public class Main {
 
 	private static void calcul_frag() {
 		list_frag.clear();
+		Graphe inter=g.diff(h);
+		List<List<Sommet>> comp_con=inter.calcul_comp_connexe();
 		
+		//on rétablit la non orientation des fragments
+		for (List<Sommet> list : comp_con) {
+			for (Sommet sommet : list) {
+				for (Sommet voisin : sommet.getVoisins()) {
+					if(h.have_sommet(voisin)){
+						voisin.ajouterVoisins(sommet);
+					}
+				}
+			}
+		}
+		
+		//ajouter les arêtes solo
+		List<Sommet> list;
+		for (Sommet som : g.sommets.values()) {
+			if(h.have_sommet(som)){
+				for (Sommet voi : som.getVoisins()) {
+					if(h.have_sommet(voi)){
+						if(!h.have_edge(som, voi)){
+							inter.ajouterVoisins(som.getNum_sommet(), voi.getNum_sommet());
+							list=new ArrayList<Sommet>();
+							list.add(som);
+							list.add(voi);
+							comp_con.add(list);
+						}
+					}
+				}
+			}
+		}
+		
+		//création des fragments
+		comp_con.forEach(x->list_frag.add(new Fragment(x)));
 		
 	}
 

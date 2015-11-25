@@ -1,15 +1,20 @@
 package mainpackage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Fragment extends Graphe {
 
 	private List<Face> face;
-	
-	public Fragment(int n, Map<Integer, Sommet> g) {
-		super(n, g);
+
+	public Fragment(Map<Integer, Sommet> g) {
+		super(g.size(), g);
+	}
+	public Fragment(List<Sommet> l) {
+		super(l.size());
+		l.forEach(x->sommets.put(x.getNum_sommet(), x));
 	}
 
 	public Fragment(int n) {
