@@ -105,10 +105,10 @@ public class Graphe {
 		// TODO : ludo, faudrait ne plus utilsier la list cycle mais le graphe h
 		cycle = new ArrayList<Sommet>();
 		cleanProperties();
-		return calculCycleRec(u);
+		return calculCycleRec(u,h);
 	}
 
-	private boolean calculCycleRec(Sommet u) {
+	private boolean calculCycleRec(Sommet u,Graphe h) {
 		u.setEtat(Etat.Atteint);
 		cycle.add(u);
 		List<Sommet> voisins = new ArrayList<Sommet>();
@@ -119,7 +119,6 @@ public class Graphe {
 		}
 		for (Sommet v : voisins) {
 			if (v.getEtat() == Etat.Atteint) {
-				v.setAppartenance_cycle(true);
 				cycle.add(v);// a ce stade, le même sommet doit etre présent
 				// deux fois dans la liste
 				// je vais tronquer la liste cycle et y laisse uniquement ce
@@ -128,15 +127,33 @@ public class Graphe {
 				int firstIndex = cycle.indexOf(v);
 				int lastIndex = cycle.lastIndexOf(v);
 				cycle = cycle.subList(firstIndex, lastIndex + 1);
-				for (Sommet w : cycle) {
+
+				h = new Graphe(cycle.size()-1);//-1 car le début du cycle et la fin du cycle, c'est le même sommet
+
+
+				for(int i=0;i<h.nb_sommets;i++){
+					Sommet w = cycle.get(i);
 					w.setAppartenance_cycle(true);
+					w.getVoisins().clear();
+					if(i==0){//premier sommet du cycle
+						w.ajouterVoisins(cycle.get(i+1));
+						w.ajouterVoisins(cycle.get(h.nb_sommets));
+					}else if(i==h.nb_sommets){//dernier sommet du cycle
+						w.ajouterVoisins(cycle.get(i-1));
+						w.ajouterVoisins(cycle.get(0));
+					}
+					else{
+						w.ajouterVoisins(cycle.get(i-1));
+						w.ajouterVoisins(cycle.get(i+1));
+					}
+					h.sommets.put(w.getNum_sommet(),w);
 				}
 
 				return true;
 			}
 			if (v.getEtat() == Etat.Non_Atteint) {
 				v.setPere(u);
-				return calculCycleRec(v);
+				return calculCycleRec(v,h);
 			}
 
 		}
@@ -161,6 +178,7 @@ public class Graphe {
 			s.ajouterVoisins(s2);
 		}
 	}
+
 
 	public boolean has_frag(Graphe h) {
 		for (Sommet sommet_x : sommets.values()) {
