@@ -2,14 +2,10 @@ package mainpackage;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import javax.sound.sampled.BooleanControl;
 
 public class Graphe {
 
@@ -59,7 +55,7 @@ public class Graphe {
 		return s + System.getProperty("line.separator");
 	}
 
-	public void parcours_largeur(int dep, Predicate<Sommet> f) {
+	public void parcours_largeur(int dep) {
 		ArrayDeque<Sommet> q = new ArrayDeque<Sommet>();
 		cleanProperties();
 		Sommet s_dep = sommets.get(dep);
@@ -70,13 +66,11 @@ public class Graphe {
 		while (!q.isEmpty()) {
 			peek = q.peek();
 			for (Sommet sommet : peek.getVoisins()) {
-				if (f.test(sommet)) {
-					if (sommet.getEtat() == Etat.Non_Atteint) {
-						sommet.setEtat(Etat.Atteint);
-						sommet.setDistance(peek.getDistance() + 1);
-						sommet.setPere(peek);
-						q.add(sommet);
-					}
+				if (sommet.getEtat() == Etat.Non_Atteint) {
+					sommet.setEtat(Etat.Atteint);
+					sommet.setDistance(peek.getDistance() + 1);
+					sommet.setPere(peek);
+					q.add(sommet);
 				}
 			}
 			q.poll();
@@ -208,4 +202,53 @@ public class Graphe {
 
 	}
 
+	public List<List<Sommet>> calcul_comp_connexe() {
+		cleanProperties();
+		Deque<Sommet> stack = new ArrayDeque<Sommet>();
+		Deque<Sommet> non_traite = new ArrayDeque<Sommet>(sommets.values());
+		List<List<Sommet>> comp = new ArrayList<List<Sommet>>();
+		List<Sommet> current_comp;
+		Sommet dep,peek;
+		while (!non_traite.isEmpty()) {
+			dep = non_traite.pop();
+			if (!dep.have_voisins()) {
+				continue;
+			}
+			current_comp=new ArrayList<Sommet>();
+			comp.add(current_comp);
+			dep.setEtat(Etat.Traite);
+			stack.add(dep);
+			//Parcours largeur
+			while (!stack.isEmpty()) {
+				peek = stack.peek();
+				current_comp.add(peek);
+				for (Sommet sommet : peek.getVoisins()) {
+					if (sommet.getEtat() == Etat.Non_Atteint) {
+						sommet.setEtat(Etat.Atteint);
+						stack.add(sommet);
+					}
+				}
+				stack.poll();
+				peek.setEtat(Etat.Traite);
+				non_traite.remove(peek);
+			}
+		}
+		return comp;
+	}
+
+	public Graphe diff(Graphe h) {
+		Graphe inter = new Graphe(nb_sommets);
+
+		// création du graphe G/H
+		for (Sommet sommet : sommets.values()) {
+			if (h.have_sommet(sommet))
+				inter.ajouterVoisins(sommet.getNum_sommet());
+			else {
+				for (Sommet voisins : sommet.getVoisins()) {
+					inter.ajouterVoisins(sommet.getNum_sommet(), voisins.getNum_sommet());
+				}
+			}
+		}
+		return inter;
+	}
 }

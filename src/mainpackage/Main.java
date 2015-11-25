@@ -1,13 +1,10 @@
 package mainpackage;
 
 import java.io.File;
-import java.util.regex.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.management.relation.RelationServiceNotRegisteredException;
 
 public class Main {
 
