@@ -1,21 +1,17 @@
 package mainpackage;
 
-import java.util.*;
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.sound.sampled.BooleanControl;
-
-public class Graphe{
+public class Graphe {
 
 	protected int nb_sommets;
 	protected Map<Integer, Sommet> sommets;
 	protected List<Sommet> cycle;
-
-	public List<Sommet> getCycle() {
-		return cycle;
-	}
 
 	public Graphe(int n) {
 		nb_sommets = n;
@@ -30,16 +26,20 @@ public class Graphe{
 	public int getNb_sommets() {
 		return nb_sommets;
 	}
-
-	public void setNb_sommets(int nb_sommets){
+	
+	public List<Sommet> getSommets(){
+		return (List<Sommet>) sommets.values();
+	}
+	
+	public void setNb_sommets(int nb_sommets) {
 		this.nb_sommets = nb_sommets;
 	}
 
-	public void setSommets(Map<Integer, Sommet> sommets){
+	public void setSommets(Map<Integer, Sommet> sommets) {
 		this.sommets = sommets;
 	}
 
-	public void setCycle(List<Sommet> cycle){
+	public void setCycle(List<Sommet> cycle) {
 		this.cycle = cycle;
 	}
 
@@ -47,20 +47,6 @@ public class Graphe{
 		int firstKey = (Integer) sommets.keySet().toArray()[0];
 		Sommet s = sommets.get(firstKey);
 		return s;
-	}
-
-	public Sommet getSommetByNumero(int numSommet){
-		Sommet s = null;
-		Iterator it = sommets.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry pair = (Map.Entry)it.next();
-			s = (Sommet) pair.getValue();
-			if(s.getNum_sommet() == numSommet){
-				return s;
-			}
-			it.remove(); // avoids a ConcurrentModificationException
-		}
-		return null;
 	}
 
 	@Override
@@ -75,13 +61,13 @@ public class Graphe{
 	public String toStringCycle() {
 		String s = "";
 
-		for (Sommet u : getCycle()) {
+		for (Sommet u : cycle) {
 			s += u.getNum_sommet() + " ";
 		}
 		return s + System.getProperty("line.separator");
 	}
 
-	public void parcours_largeur(int dep, Predicate<Sommet> f) {
+	public void parcours_largeur(int dep) {
 		ArrayDeque<Sommet> q = new ArrayDeque<Sommet>();
 		cleanProperties();
 		Sommet s_dep = sommets.get(dep);
@@ -92,13 +78,11 @@ public class Graphe{
 		while (!q.isEmpty()) {
 			peek = q.peek();
 			for (Sommet sommet : peek.getVoisins()) {
-				if (f.test(sommet)) {
-					if (sommet.getEtat() == Etat.Non_Atteint) {
-						sommet.setEtat(Etat.Atteint);
-						sommet.setDistance(peek.getDistance() + 1);
-						sommet.setPere(peek);
-						q.add(sommet);
-					}
+				if (sommet.getEtat() == Etat.Non_Atteint) {
+					sommet.setEtat(Etat.Atteint);
+					sommet.setDistance(peek.getDistance() + 1);
+					sommet.setPere(peek);
+					q.add(sommet);
 				}
 			}
 			q.poll();
@@ -129,27 +113,28 @@ public class Graphe{
 		s.setEtat(Etat.Traite);
 	}
 
-	public boolean calculCycle(Sommet u) {
-		// TODO : ludo, faudrait ne plus utilsier la list cycle mais le graphe h
+	public boolean calculCycle(Sommet u, Graphe h) {
 		cycle = new ArrayList<Sommet>();
 		cleanProperties();
-		return calculCycleRec(u);
+		boolean b=calculCycleRec(u);
+		int cyclesize=cycle.size();
+		h=new Graphe(cyclesize);
+		int prec, here;
+		for (int i=1;i<cyclesize;i++){
+			prec=cycle.get(i-1).getNum_sommet();
+			here=cycle.get(i).getNum_sommet();
+			h.ajouterVoisins(prec, here);
+		}
+		return b;
 	}
 
 	private boolean calculCycleRec(Sommet u) {
 		u.setEtat(Etat.Atteint);
 		cycle.add(u);
 		List<Sommet> voisins = new ArrayList<Sommet>();
-		//voisins = cloneList(u.getVoisins());//voisins est un clone de u.getVoisins
 		voisins = u.getVoisins();
-//		if (voisins.contains(u.getPere())) {
-//			//int indexOfPere = voisins.indexOf(u.getPere());
-//			int indexOfPere = u.getVoisins().indexOf(u.getPere());
-//			voisins.remove(indexOfPere);// exclure le père du parcours
-//			//cette ligne doit exclure le père de la liste voisins, mais pas de u.getVoisins
-//		}
 		for (Sommet v : voisins) {
-			if(v != u.getPere()){
+			if (v != u.getPere()) {
 				if (v.getEtat() == Etat.Atteint) {
 					cycle.add(v);// a ce stade, le même sommet doit etre présent
 					// deux fois dans la liste
@@ -159,7 +144,6 @@ public class Graphe{
 					int firstIndex = cycle.indexOf(v);
 					int lastIndex = cycle.lastIndexOf(v);
 					cycle = cycle.subList(firstIndex, lastIndex + 1);
-
 
 					return true;
 				}
@@ -190,7 +174,6 @@ public class Graphe{
 			s.ajouterVoisins(s2);
 		}
 	}
-
 
 	public boolean has_frag(Graphe h) {
 		for (Sommet sommet_x : sommets.values()) {
@@ -232,4 +215,53 @@ public class Graphe{
 
 	}
 
+	public List<List<Sommet>> calcul_comp_connexe() {
+		cleanProperties();
+		Deque<Sommet> stack = new ArrayDeque<Sommet>();
+		Deque<Sommet> non_traite = new ArrayDeque<Sommet>(sommets.values());
+		List<List<Sommet>> comp = new ArrayList<List<Sommet>>();
+		List<Sommet> current_comp;
+		Sommet dep, peek;
+		while (!non_traite.isEmpty()) {
+			dep = non_traite.pop();
+			if (!dep.have_voisins()) {
+				continue;
+			}
+			current_comp = new ArrayList<Sommet>();
+			comp.add(current_comp);
+			dep.setEtat(Etat.Traite);
+			stack.add(dep);
+			// Parcours largeur
+			while (!stack.isEmpty()) {
+				peek = stack.peek();
+				current_comp.add(peek);
+				for (Sommet sommet : peek.getVoisins()) {
+					if (sommet.getEtat() == Etat.Non_Atteint) {
+						sommet.setEtat(Etat.Atteint);
+						stack.add(sommet);
+					}
+				}
+				stack.poll();
+				peek.setEtat(Etat.Traite);
+				non_traite.remove(peek);
+			}
+		}
+		return comp;
+	}
+
+	public Graphe diff(Graphe h) {
+		Graphe inter = new Graphe(nb_sommets);
+
+		// création du graphe G/H
+		for (Sommet sommet : sommets.values()) {
+			if (h.have_sommet(sommet))
+				inter.ajouterVoisins(sommet.getNum_sommet());
+			else {
+				for (Sommet voisins : sommet.getVoisins()) {
+					inter.ajouterVoisins(sommet.getNum_sommet(), voisins.getNum_sommet());
+				}
+			}
+		}
+		return inter;
+	}
 }

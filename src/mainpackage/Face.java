@@ -8,9 +8,12 @@ public class Face {
 	
 	private List<Sommet> sommets;
 
-	public Face(List<Sommet> sommets) {
+	public Face(Graphe g) {
 		super();
-		this.sommets = new ArrayList<Sommet>(sommets);
+		sommets=g.getSommets();
+	}
+	public Face(List<Sommet> L){
+		sommets=L;
 	}
 
 	public List<Sommet> getSommets() {
