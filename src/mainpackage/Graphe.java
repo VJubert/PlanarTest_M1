@@ -28,7 +28,7 @@ public class Graphe {
 	}
 	
 	public List<Sommet> getSommets(){
-		return (List<Sommet>) sommets.values();
+		return new ArrayList<Sommet>(sommets.values());
 	}
 	
 	public void setNb_sommets(int nb_sommets) {
@@ -117,15 +117,20 @@ public class Graphe {
 		cycle = new ArrayList<Sommet>();
 		cleanProperties();
 		boolean b=calculCycleRec(u);
+		return b;
+	}
+
+	public Graphe createH() {
 		int cyclesize=cycle.size();
-		h=new Graphe(cyclesize);
+		Graphe h=new Graphe(cyclesize);
 		int prec, here;
 		for (int i=1;i<cyclesize;i++){
 			prec=cycle.get(i-1).getNum_sommet();
 			here=cycle.get(i).getNum_sommet();
 			h.ajouterVoisins(prec, here);
+			h.ajouterVoisins(here, prec);			
 		}
-		return b;
+		return h;
 	}
 
 	private boolean calculCycleRec(Sommet u) {
@@ -176,14 +181,15 @@ public class Graphe {
 	}
 
 	public boolean has_frag(Graphe h) {
+		boolean cpt=false;
 		for (Sommet sommet_x : sommets.values()) {
 			for (Sommet sommet_y : sommet_x.getVoisins()) {
-				if (h.have_edge(sommet_x, sommet_y) || h.have_edge(sommet_y, sommet_x)) {
-					return false;
+				if (!(h.have_edge(sommet_x, sommet_y) || h.have_edge(sommet_y, sommet_x))) {
+					cpt=true;
 				}
 			}
 		}
-		return true;
+		return cpt;
 	}
 
 	public boolean have_edge(Sommet x, Sommet y) {
@@ -196,11 +202,7 @@ public class Graphe {
 	}
 
 	public boolean have_sommet(Sommet x) {
-		if (sommets.get(x.getNum_sommet()) != null) {
-			return true;
-		} else {
-			return false;
-		}
+		return sommets.get(x.getNum_sommet()) != null;
 	}
 
 	public void ajouterchemin(List<Sommet> chemin) {

@@ -15,14 +15,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		file_to_graph(args[0]);
-
 		if (!g.calculCycle(g.getPremierSommet(), h)) {
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 			return;
-		} else {// il y a un cycle, je l'affiche
-			System.out.println("il y a un cycle !");
 		}
+		h=g.createH();
 		init_face();
 		boolean une_seul_face = false;
 		while (g.has_frag(h)) {
@@ -30,6 +28,7 @@ public class Main {
 			une_seul_face = false;
 			for (Fragment frag : list_frag) {
 				if (!une_seul_face) {
+					//ici ça bug
 					int nb_face_admissible = frag.calcul_face_admissible(list_face);
 					switch (nb_face_admissible) {
 					case 0:
@@ -48,8 +47,8 @@ public class Main {
 				list_face.add(list_frag.get(0).plonger(h));
 			}
 		}
-		System.out.println("true");
-		afficherCartePlanaire();
+//		System.out.println("true");
+//		afficherCartePlanaire();
 	}
 
 	private static void init_face() {
@@ -60,7 +59,6 @@ public class Main {
 
 	private static void afficherCartePlanaire() {
 		list_face.forEach(System.out::println);
-
 	}
 
 	private static void calcul_frag() {

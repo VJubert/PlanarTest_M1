@@ -10,10 +10,12 @@ public class Fragment extends Graphe {
 
 	public Fragment(Map<Integer, Sommet> g) {
 		super(g.size(), g);
+		face=new ArrayList<Face>();
 	}
 	public Fragment(List<Sommet> l) {
 		super(l.size());
 		l.forEach(x->sommets.put(x.getNum_sommet(), x));
+		face=new ArrayList<Face>();
 	}
 
 	public Fragment(int n) {
@@ -36,9 +38,10 @@ public class Fragment extends Graphe {
 		Face f=face.get(0);
 		ArrayList<Sommet> s=new ArrayList<Sommet>();
 		for (Sommet sommet : f.getSommets()) {
-			if(h.have_sommet(sommet))
+			if(h.have_sommet(sommet)){
 				s.add(sommet);
-		}
+			}
+		} 
 		List<Sommet> chemin=trouverChemin(s.get(0), s.get(1));
 		h.ajouterchemin(chemin);
 		Face f2=f.maj(chemin);
