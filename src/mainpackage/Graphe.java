@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 
 import javax.sound.sampled.BooleanControl;
 
-public class Graphe implements Cloneable{
+public class Graphe{
 
 	protected int nb_sommets;
 	protected Map<Integer, Sommet> sommets;
@@ -25,16 +25,6 @@ public class Graphe implements Cloneable{
 	public Graphe(int n, Map<Integer, Sommet> g) {
 		nb_sommets = n;
 		sommets = g;
-	}
-
-	public Object clone(){
-		Graphe g = new Graphe(this.nb_sommets);
-		g.setNb_sommets(this.nb_sommets);
-		HashMap<Integer,Sommet> cloneSommets = new HashMap<Integer,Sommet>(this.sommets);
-		g.setSommets(cloneSommets);
-		g.setCycle(this.cycle);
-
-		return g;
 	}
 
 	public int getNb_sommets() {

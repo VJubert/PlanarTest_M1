@@ -18,14 +18,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		//file_to_graph(args[0]);
-		g = new Graphe(5);
-		g.ajouterVoisins(0,1);
-		g.ajouterVoisins(1,0,2,3);
+		g = new Graphe(4);
+
+		g.ajouterVoisins(1,2,3);
 		g.ajouterVoisins(2,1,4);
 		g.ajouterVoisins(3,1,4);
 		g.ajouterVoisins(4,2,3);
 
-		//Graphe g1 = (Graphe) g.clone();
 		if (!g.calculCycle(g.getPremierSommet())) {
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
