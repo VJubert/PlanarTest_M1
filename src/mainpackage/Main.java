@@ -23,12 +23,13 @@ public class Main {
 		h=g.createH();
 		init_face();
 		boolean une_seul_face = false;
-		while (g.has_frag(h)) {
+//		while (g.has_frag(h)) {
 			calcul_frag();
 			une_seul_face = false;
 			for (Fragment frag : list_frag) {
 				if (!une_seul_face) {
 					//ici ça bug
+					frag.def_contact(h);
 					int nb_face_admissible = frag.calcul_face_admissible(list_face);
 					switch (nb_face_admissible) {
 					case 0:
@@ -46,15 +47,15 @@ public class Main {
 			if (!une_seul_face) {
 				list_face.add(list_frag.get(0).plonger(h));
 			}
-		}
-//		System.out.println("true");
-//		afficherCartePlanaire();
+//		}
+		System.out.println("true");
+		afficherCartePlanaire();
 	}
 
 	private static void init_face() {
 		list_face.clear();
-		list_face.add(new Face(g));
-		list_face.add(new Face(g));
+		list_face.add(new Face(h));
+		list_face.add(new Face(h));
 	}
 
 	private static void afficherCartePlanaire() {
