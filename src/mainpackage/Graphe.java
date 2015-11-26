@@ -1,13 +1,13 @@
 package mainpackage;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-public class Graphe {
+import javax.sound.sampled.BooleanControl;
+
+public class Graphe implements Cloneable{
 
 	protected int nb_sommets;
 	protected Map<Integer, Sommet> sommets;
@@ -27,14 +27,50 @@ public class Graphe {
 		sommets = g;
 	}
 
+	public Object clone(){
+		Graphe g = new Graphe(this.nb_sommets);
+		g.setNb_sommets(this.nb_sommets);
+		HashMap<Integer,Sommet> cloneSommets = new HashMap<Integer,Sommet>(this.sommets);
+		g.setSommets(cloneSommets);
+		g.setCycle(this.cycle);
+
+		return g;
+	}
+
 	public int getNb_sommets() {
 		return nb_sommets;
+	}
+
+	public void setNb_sommets(int nb_sommets){
+		this.nb_sommets = nb_sommets;
+	}
+
+	public void setSommets(Map<Integer, Sommet> sommets){
+		this.sommets = sommets;
+	}
+
+	public void setCycle(List<Sommet> cycle){
+		this.cycle = cycle;
 	}
 
 	public Sommet getPremierSommet() {
 		int firstKey = (Integer) sommets.keySet().toArray()[0];
 		Sommet s = sommets.get(firstKey);
 		return s;
+	}
+
+	public Sommet getSommetByNumero(int numSommet){
+		Sommet s = null;
+		Iterator it = sommets.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry)it.next();
+			s = (Sommet) pair.getValue();
+			if(s.getNum_sommet() == numSommet){
+				return s;
+			}
+			it.remove(); // avoids a ConcurrentModificationException
+		}
+		return null;
 	}
 
 	@Override
@@ -55,7 +91,7 @@ public class Graphe {
 		return s + System.getProperty("line.separator");
 	}
 
-	public void parcours_largeur(int dep) {
+	public void parcours_largeur(int dep, Predicate<Sommet> f) {
 		ArrayDeque<Sommet> q = new ArrayDeque<Sommet>();
 		cleanProperties();
 		Sommet s_dep = sommets.get(dep);
@@ -66,11 +102,13 @@ public class Graphe {
 		while (!q.isEmpty()) {
 			peek = q.peek();
 			for (Sommet sommet : peek.getVoisins()) {
-				if (sommet.getEtat() == Etat.Non_Atteint) {
-					sommet.setEtat(Etat.Atteint);
-					sommet.setDistance(peek.getDistance() + 1);
-					sommet.setPere(peek);
-					q.add(sommet);
+				if (f.test(sommet)) {
+					if (sommet.getEtat() == Etat.Non_Atteint) {
+						sommet.setEtat(Etat.Atteint);
+						sommet.setDistance(peek.getDistance() + 1);
+						sommet.setPere(peek);
+						q.add(sommet);
+					}
 				}
 			}
 			q.poll();
@@ -101,61 +139,45 @@ public class Graphe {
 		s.setEtat(Etat.Traite);
 	}
 
-	public boolean calculCycle(Sommet u, Graphe h) {
+	public boolean calculCycle(Sommet u) {
 		// TODO : ludo, faudrait ne plus utilsier la list cycle mais le graphe h
 		cycle = new ArrayList<Sommet>();
 		cleanProperties();
-		return calculCycleRec(u,h);
+		return calculCycleRec(u);
 	}
 
-	private boolean calculCycleRec(Sommet u,Graphe h) {
+	private boolean calculCycleRec(Sommet u) {
 		u.setEtat(Etat.Atteint);
 		cycle.add(u);
 		List<Sommet> voisins = new ArrayList<Sommet>();
+		//voisins = cloneList(u.getVoisins());//voisins est un clone de u.getVoisins
 		voisins = u.getVoisins();
-		if (voisins.contains(u.getPere())) {
-			int indexOfPere = voisins.indexOf(u.getPere());
-			voisins.remove(indexOfPere);// exclure le père du parcours
-		}
+//		if (voisins.contains(u.getPere())) {
+//			//int indexOfPere = voisins.indexOf(u.getPere());
+//			int indexOfPere = u.getVoisins().indexOf(u.getPere());
+//			voisins.remove(indexOfPere);// exclure le père du parcours
+//			//cette ligne doit exclure le père de la liste voisins, mais pas de u.getVoisins
+//		}
 		for (Sommet v : voisins) {
-			if (v.getEtat() == Etat.Atteint) {
-				cycle.add(v);// a ce stade, le même sommet doit etre présent
-				// deux fois dans la liste
-				// je vais tronquer la liste cycle et y laisse uniquement ce
-				// qu'il y a entre ces deux sommets
+			if(v != u.getPere()){
+				if (v.getEtat() == Etat.Atteint) {
+					cycle.add(v);// a ce stade, le même sommet doit etre présent
+					// deux fois dans la liste
+					// je vais tronquer la liste cycle et y laisse uniquement ce
+					// qu'il y a entre ces deux sommets
 
-				int firstIndex = cycle.indexOf(v);
-				int lastIndex = cycle.lastIndexOf(v);
-				cycle = cycle.subList(firstIndex, lastIndex + 1);
-
-				h = new Graphe(cycle.size()-1);//-1 car le début du cycle et la fin du cycle, c'est le même sommet
+					int firstIndex = cycle.indexOf(v);
+					int lastIndex = cycle.lastIndexOf(v);
+					cycle = cycle.subList(firstIndex, lastIndex + 1);
 
 
-				for(int i=0;i<h.nb_sommets;i++){
-					Sommet w = cycle.get(i);
-					w.setAppartenance_cycle(true);
-					w.getVoisins().clear();
-					if(i==0){//premier sommet du cycle
-						w.ajouterVoisins(cycle.get(i+1));
-						w.ajouterVoisins(cycle.get(h.nb_sommets));
-					}else if(i==h.nb_sommets){//dernier sommet du cycle
-						w.ajouterVoisins(cycle.get(i-1));
-						w.ajouterVoisins(cycle.get(0));
-					}
-					else{
-						w.ajouterVoisins(cycle.get(i-1));
-						w.ajouterVoisins(cycle.get(i+1));
-					}
-					h.sommets.put(w.getNum_sommet(),w);
+					return true;
 				}
-
-				return true;
+				if (v.getEtat() == Etat.Non_Atteint) {
+					v.setPere(u);
+					return calculCycleRec(v);
+				}
 			}
-			if (v.getEtat() == Etat.Non_Atteint) {
-				v.setPere(u);
-				return calculCycleRec(v,h);
-			}
-
 		}
 		u.setEtat(Etat.Traite);
 		cycle.clear();
@@ -220,53 +242,4 @@ public class Graphe {
 
 	}
 
-	public List<List<Sommet>> calcul_comp_connexe() {
-		cleanProperties();
-		Deque<Sommet> stack = new ArrayDeque<Sommet>();
-		Deque<Sommet> non_traite = new ArrayDeque<Sommet>(sommets.values());
-		List<List<Sommet>> comp = new ArrayList<List<Sommet>>();
-		List<Sommet> current_comp;
-		Sommet dep,peek;
-		while (!non_traite.isEmpty()) {
-			dep = non_traite.pop();
-			if (!dep.have_voisins()) {
-				continue;
-			}
-			current_comp=new ArrayList<Sommet>();
-			comp.add(current_comp);
-			dep.setEtat(Etat.Traite);
-			stack.add(dep);
-			//Parcours largeur
-			while (!stack.isEmpty()) {
-				peek = stack.peek();
-				current_comp.add(peek);
-				for (Sommet sommet : peek.getVoisins()) {
-					if (sommet.getEtat() == Etat.Non_Atteint) {
-						sommet.setEtat(Etat.Atteint);
-						stack.add(sommet);
-					}
-				}
-				stack.poll();
-				peek.setEtat(Etat.Traite);
-				non_traite.remove(peek);
-			}
-		}
-		return comp;
-	}
-
-	public Graphe diff(Graphe h) {
-		Graphe inter = new Graphe(nb_sommets);
-
-		// création du graphe G/H
-		for (Sommet sommet : sommets.values()) {
-			if (h.have_sommet(sommet))
-				inter.ajouterVoisins(sommet.getNum_sommet());
-			else {
-				for (Sommet voisins : sommet.getVoisins()) {
-					inter.ajouterVoisins(sommet.getNum_sommet(), voisins.getNum_sommet());
-				}
-			}
-		}
-		return inter;
-	}
 }

@@ -3,7 +3,7 @@ package mainpackage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sommet {
+public class Sommet{
 
 	private int num_sommet;
 	private boolean appartenance_cycle;
@@ -16,6 +16,14 @@ public class Sommet {
 		this.num_sommet = num_sommet;
 		etat = Etat.Non_Atteint;
 		voisins = new ArrayList<Sommet>();
+	}
+
+	public void setNum_sommet(int num_sommet){
+		this.num_sommet = num_sommet;
+	}
+
+	public void setVoisins(List<Sommet> voisins){
+		this.voisins = voisins;
 	}
 
 	public boolean have_voisin(Sommet v) {
@@ -97,7 +105,7 @@ public class Sommet {
 		if (!(obj instanceof Sommet))
 			return false;
 		Sommet other = (Sommet) obj;
-		return num_sommet != other.num_sommet;
+		return num_sommet == other.num_sommet;
 	}
 
 }

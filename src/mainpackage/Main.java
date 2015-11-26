@@ -1,11 +1,13 @@
 package mainpackage;
 
 import java.io.File;
+import java.util.regex.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.management.relation.RelationServiceNotRegisteredException;
 
 public class Main {
 
@@ -15,13 +17,24 @@ public class Main {
 	private static List<Face> list_face = new ArrayList<Face>();
 
 	public static void main(String[] args) {
-		file_to_graph(args[0]);
-		if (!g.calculCycle(g.getPremierSommet(), h)) {
+		//file_to_graph(args[0]);
+		g = new Graphe(5);
+		g.ajouterVoisins(0,1);
+		g.ajouterVoisins(1,0,2,3);
+		g.ajouterVoisins(2,1,4);
+		g.ajouterVoisins(3,1,4);
+		g.ajouterVoisins(4,2,3);
+
+		//Graphe g1 = (Graphe) g.clone();
+		if (!g.calculCycle(g.getPremierSommet())) {
 			System.out.println("true");
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 			return;
 		} else {// il y a un cycle, je l'affiche
 			System.out.println("il y a un cycle !");
+
+			h = new Graphe(g.getCycle().size() -1);
+			h.ajouterchemin(g.getCycle());
 
 		}
 		init_face();
@@ -66,41 +79,6 @@ public class Main {
 
 	private static void calcul_frag() {
 		list_frag.clear();
-		Graphe inter=g.diff(h);
-		List<List<Sommet>> comp_con=inter.calcul_comp_connexe();
-		
-		//on rétablit la non orientation des fragments
-		for (List<Sommet> list : comp_con) {
-			for (Sommet sommet : list) {
-				for (Sommet voisin : sommet.getVoisins()) {
-					if(h.have_sommet(voisin)){
-						voisin.ajouterVoisins(sommet);
-					}
-				}
-			}
-		}
-		
-		//ajouter les arêtes solo
-		List<Sommet> list;
-		for (Sommet som : g.sommets.values()) {
-			if(h.have_sommet(som)){
-				for (Sommet voi : som.getVoisins()) {
-					if(h.have_sommet(voi)){
-						if(!h.have_edge(som, voi)){
-							inter.ajouterVoisins(som.getNum_sommet(), voi.getNum_sommet());
-							list=new ArrayList<Sommet>();
-							list.add(som);
-							list.add(voi);
-							comp_con.add(list);
-						}
-					}
-				}
-			}
-		}
-		
-		//création des fragments
-		comp_con.forEach(x->list_frag.add(new Fragment(x)));
-		
 	}
 
 	private static void file_to_graph(String fileName) {
