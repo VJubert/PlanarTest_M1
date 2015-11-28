@@ -3,7 +3,7 @@ package mainpackage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sommet{
+public class Sommet {
 
 	private int num_sommet;
 	private boolean appartenance_cycle;
@@ -18,11 +18,11 @@ public class Sommet{
 		voisins = new ArrayList<Sommet>();
 	}
 
-	public void setNum_sommet(int num_sommet){
+	public void setNum_sommet(int num_sommet) {
 		this.num_sommet = num_sommet;
 	}
 
-	public void setVoisins(List<Sommet> voisins){
+	public void setVoisins(List<Sommet> voisins) {
 		this.voisins = voisins;
 	}
 

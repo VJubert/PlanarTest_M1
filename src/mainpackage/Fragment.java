@@ -33,23 +33,20 @@ public class Fragment extends Graphe {
 		while (!dep.equals(x)) {
 			res.add(dep);
 			dep = dep.getPere();
+			if(contact.contains(dep))
+				break;
 		}
-		res.add(x);
+		res.add(dep);
 		return res;
 	}
 
 	public Face plonger(Graphe h) {
+//		System.out.println(this);
 		Face f = face.get(0);
-
-		// trouver les sommets qui sont dans le cycle
-		ArrayList<Sommet> s = new ArrayList<Sommet>();
-		for (Sommet sommet : f.getSommets()) {
-			if (h.have_sommet(sommet)) {
-				s.add(sommet);
-			}
-		}
-
-		List<Sommet> chemin = trouverChemin(s.get(0), s.get(1));
+//		System.out.println(contact);
+		List<Sommet> chemin = trouverChemin(contact.get(0), contact.get(1));
+		System.out.println(chemin);
+		System.out.println(f);
 		h.ajouterchemin(chemin);
 		Face f2 = f.maj(chemin);
 		return f2;

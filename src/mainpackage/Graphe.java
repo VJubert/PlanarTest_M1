@@ -11,7 +11,7 @@ public class Graphe {
 
 	protected int nb_sommets;
 	protected Map<Integer, Sommet> sommets;
-	protected List<Sommet> cycle;
+	private List<Sommet> cycle;
 
 	public Graphe(int n) {
 		nb_sommets = n;
@@ -26,11 +26,11 @@ public class Graphe {
 	public int getNb_sommets() {
 		return nb_sommets;
 	}
-	
-	public List<Sommet> getSommets(){
+
+	public List<Sommet> getSommets() {
 		return new ArrayList<Sommet>(sommets.values());
 	}
-	
+
 	public void setNb_sommets(int nb_sommets) {
 		this.nb_sommets = nb_sommets;
 	}
@@ -56,15 +56,6 @@ public class Graphe {
 			s += so + System.getProperty("line.separator");
 		}
 		return s;
-	}
-
-	public String toStringCycle() {
-		String s = "";
-
-		for (Sommet u : cycle) {
-			s += u.getNum_sommet() + " ";
-		}
-		return s + System.getProperty("line.separator");
 	}
 
 	public void parcours_largeur(int dep) {
@@ -116,19 +107,19 @@ public class Graphe {
 	public boolean calculCycle(Sommet u, Graphe h) {
 		cycle = new ArrayList<Sommet>();
 		cleanProperties();
-		boolean b=calculCycleRec(u);
+		boolean b = calculCycleRec(u);
 		return b;
 	}
 
 	public Graphe createH() {
-		int cyclesize=cycle.size();
-		Graphe h=new Graphe(cyclesize);
+		int cyclesize = cycle.size();
+		Graphe h = new Graphe(cyclesize);
 		int prec, here;
-		for (int i=1;i<cyclesize;i++){
-			prec=cycle.get(i-1).getNum_sommet();
-			here=cycle.get(i).getNum_sommet();
+		for (int i = 1; i < cyclesize; i++) {
+			prec = cycle.get(i - 1).getNum_sommet();
+			here = cycle.get(i).getNum_sommet();
 			h.ajouterVoisins(prec, here);
-			h.ajouterVoisins(here, prec);			
+			h.ajouterVoisins(here, prec);
 		}
 		return h;
 	}
@@ -141,7 +132,8 @@ public class Graphe {
 		for (Sommet v : voisins) {
 			if (v != u.getPere()) {
 				if (v.getEtat() == Etat.Atteint) {
-					cycle.add(v);// a ce stade, le même sommet doit etre présent
+					cycle.add(v);
+					// à ce stade, le même sommet doit être présent
 					// deux fois dans la liste
 					// je vais tronquer la liste cycle et y laisse uniquement ce
 					// qu'il y a entre ces deux sommets
@@ -181,11 +173,11 @@ public class Graphe {
 	}
 
 	public boolean has_frag(Graphe h) {
-		boolean cpt=false;
+		boolean cpt = false;
 		for (Sommet sommet_x : sommets.values()) {
 			for (Sommet sommet_y : sommet_x.getVoisins()) {
 				if (!(h.have_edge(sommet_x, sommet_y) || h.have_edge(sommet_y, sommet_x))) {
-					cpt=true;
+					cpt = true;
 				}
 			}
 		}
@@ -254,7 +246,7 @@ public class Graphe {
 	public Graphe diff(Graphe h) {
 		Graphe inter = new Graphe(nb_sommets);
 
-		// création du graphe G/H
+		// Création du graphe G/H
 		for (Sommet sommet : sommets.values()) {
 			if (h.have_sommet(sommet))
 				inter.ajouterVoisins(sommet.getNum_sommet());

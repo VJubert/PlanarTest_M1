@@ -20,16 +20,24 @@ public class Main {
 			System.out.println("Pas de cycle => Arbre => Toujours planaire");
 			return;
 		}
-		h=g.createH();
+		h = g.createH();
 		init_face();
 		boolean une_seul_face = false;
-//		while (g.has_frag(h)) {
+		int i = 0;
+		while (g.has_frag(h)) {
+			i++;
+			for (int j = 0; j < 50; j++) {
+				System.out.print(i);
+			}
+			System.out.println();
+			System.out.println(h);
+			System.out.println(list_face);
 			calcul_frag();
+//			System.out.println(list_frag);
 			une_seul_face = false;
 			for (Fragment frag : list_frag) {
 				if (!une_seul_face) {
-					//ici ça bug
-					frag.def_contact(h);
+					// ici ça bug
 					int nb_face_admissible = frag.calcul_face_admissible(list_face);
 					switch (nb_face_admissible) {
 					case 0:
@@ -47,7 +55,7 @@ public class Main {
 			if (!une_seul_face) {
 				list_face.add(list_frag.get(0).plonger(h));
 			}
-//		}
+		}
 		System.out.println("true");
 		afficherCartePlanaire();
 	}
@@ -97,6 +105,9 @@ public class Main {
 
 		// création des fragments
 		comp_con.forEach(x -> list_frag.add(new Fragment(x)));
+
+		// définition des sommets de contact pour chaque fragment
+		list_frag.forEach(x -> x.def_contact(h));
 	}
 
 	private static void file_to_graph(String fileName) {
