@@ -34,12 +34,12 @@ public class Face {
 		Sommet x = chemin.get(0);
 		Sommet y = chemin.get(chemin.size() - 1);
 		for (Sommet sommet : sommets) {
-			if(sommet.equals(x))
+			if (sommet.equals(x))
 				break;
-			if(sommet.equals(y)){
-				x=chemin.get(chemin.size()-1);
-				y=chemin.get(0);
-				chemin=reverseList(chemin);
+			if (sommet.equals(y)) {
+				x = chemin.get(chemin.size() - 1);
+				y = chemin.get(0);
+				chemin = reverseList(chemin);
 				break;
 			}
 		}
@@ -66,14 +66,14 @@ public class Face {
 			if (a.equals(y))
 				avant = true;
 		}
-		chemin=reverseList(chemin);
+		chemin = reverseList(chemin);
 		for (Sommet sommet : chemin) {
-			if(!(sommet.equals(x) || sommet.equals(y))){
+			if (!(sommet.equals(x) || sommet.equals(y))) {
 				t2.add(sommet);
 			}
 		}
-		t1=removeDouble(t1);
-		t2=removeDouble(t2);
+		t1 = removeDouble(t1);
+		t2 = removeDouble(t2);
 
 		sommets = t1;
 		return new Face(t2);
@@ -88,10 +88,11 @@ public class Face {
 		}
 		return res;
 	}
-	public static <E> List<E> reverseList(List<E> l){
+
+	public static <E> List<E> reverseList(List<E> l) {
 		List<E> res = new ArrayList<>();
-		int size=l.size();
-		for (int i=size-1;i>=0;i--){
+		int size = l.size();
+		for (int i = size - 1; i >= 0; i--) {
 			res.add(l.get(i));
 		}
 		return res;

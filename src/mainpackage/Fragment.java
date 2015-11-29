@@ -33,7 +33,7 @@ public class Fragment extends Graphe {
 		while (!dep.equals(x)) {
 			res.add(dep);
 			dep = dep.getPere();
-			if(contact.contains(dep))
+			if (contact.contains(dep))
 				break;
 		}
 		res.add(dep);
