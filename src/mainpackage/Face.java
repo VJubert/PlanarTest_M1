@@ -33,6 +33,16 @@ public class Face {
 	public Face maj(List<Sommet> chemin) {
 		Sommet x = chemin.get(0);
 		Sommet y = chemin.get(chemin.size() - 1);
+		for (Sommet sommet : sommets) {
+			if(sommet.equals(x))
+				break;
+			if(sommet.equals(y)){
+				x=chemin.get(chemin.size()-1);
+				y=chemin.get(0);
+				chemin=reverseList(chemin);
+				break;
+			}
+		}
 
 		Iterator<Sommet> it = sommets.iterator();
 		Sommet a;
@@ -56,9 +66,11 @@ public class Face {
 			if (a.equals(y))
 				avant = true;
 		}
-		int sizechemin = chemin.size();
-		for (int i = sizechemin - 1; i > 0; i--) {
-			t2.add(chemin.get(i));
+		chemin=reverseList(chemin);
+		for (Sommet sommet : chemin) {
+			if(!(sommet.equals(x) || sommet.equals(y))){
+				t2.add(sommet);
+			}
 		}
 		t1=removeDouble(t1);
 		t2=removeDouble(t2);
@@ -73,6 +85,14 @@ public class Face {
 		for (E object : l) {
 			if (!res.contains(object))
 				res.add(object);
+		}
+		return res;
+	}
+	public static <E> List<E> reverseList(List<E> l){
+		List<E> res = new ArrayList<>();
+		int size=l.size();
+		for (int i=size-1;i>=0;i--){
+			res.add(l.get(i));
 		}
 		return res;
 	}

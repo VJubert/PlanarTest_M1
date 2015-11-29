@@ -41,12 +41,8 @@ public class Fragment extends Graphe {
 	}
 
 	public Face plonger(Graphe h) {
-//		System.out.println(this);
 		Face f = face.get(0);
-//		System.out.println(contact);
 		List<Sommet> chemin = trouverChemin(contact.get(0), contact.get(1));
-		System.out.println(chemin);
-		System.out.println(f);
 		h.ajouterchemin(chemin);
 		Face f2 = f.maj(chemin);
 		return f2;
