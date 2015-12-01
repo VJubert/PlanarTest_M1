@@ -246,7 +246,7 @@ public class Graphe {
 	public Graphe diff(Graphe h) {
 		Graphe inter = new Graphe(nb_sommets);
 
-		// Création du graphe G/H
+		// Création du graphe This/H
 		for (Sommet sommet : sommets.values()) {
 			if (h.have_sommet(sommet))
 				inter.ajouterVoisins(sommet.getNum_sommet());

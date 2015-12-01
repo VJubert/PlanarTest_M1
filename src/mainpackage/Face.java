@@ -33,6 +33,7 @@ public class Face {
 	public Face maj(List<Sommet> chemin) {
 		Sommet x = chemin.get(0);
 		Sommet y = chemin.get(chemin.size() - 1);
+		//Si besoin on inverse le chemin
 		for (Sommet sommet : sommets) {
 			if (sommet.equals(x))
 				break;
@@ -66,6 +67,7 @@ public class Face {
 			if (a.equals(y))
 				avant = true;
 		}
+		//on ajoute le chemin dans la seconde face
 		chemin = reverseList(chemin);
 		for (Sommet sommet : chemin) {
 			if (!(sommet.equals(x) || sommet.equals(y))) {

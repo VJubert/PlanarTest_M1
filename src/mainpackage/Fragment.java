@@ -33,6 +33,7 @@ public class Fragment extends Graphe {
 		while (!dep.equals(x)) {
 			res.add(dep);
 			dep = dep.getPere();
+			//si dans le chemin il y a un sommet de contact on coupe le chemin
 			if (contact.contains(dep))
 				break;
 		}
