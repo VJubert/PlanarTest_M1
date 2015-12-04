@@ -22,6 +22,8 @@ public class Main {
 		} catch (IOException e) {
 			System.err.println("Entrée inconnu");
 			return;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.err.println("Besoin d'un graphe en entrée");
 		}
 		if (!g.calculCycle(g.getPremierSommet(), h)) {
 			System.out.println("true");
