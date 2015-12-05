@@ -88,6 +88,7 @@ public class Sommet {
 	@Override
 	public String toString() {
 		String s = num_sommet + " [";
+		//O(m)
 		for (Sommet sommet : voisins) {
 			s += sommet.getNum_sommet() + ", ";
 		}

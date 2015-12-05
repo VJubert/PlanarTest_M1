@@ -33,17 +33,22 @@ public class Main {
 		h = g.createH();
 		init_face();
 		boolean une_seul_face = false;
+		//O(m3+n)
 		while (g.has_frag(h)) {
+			//O(n+m)
 			calcul_frag();
 			une_seul_face = false;
+			//O(m²+n)
 			for (Fragment frag : list_frag) {
 				if (!une_seul_face) {
+					//O(m)
 					int nb_face_admissible = frag.calcul_face_admissible(list_face);
 					switch (nb_face_admissible) {
 					case 0:
 						System.out.println(false);
 						return;
 					case 1:
+						//O(n+m)
 						list_face.add(frag.plonger(h));
 						une_seul_face = true;
 						break;
@@ -53,6 +58,7 @@ public class Main {
 				}
 			}
 			if (!une_seul_face) {
+				//O(n+m)
 				list_face.add(list_frag.get(0).plonger(h));
 			}
 		}
@@ -65,12 +71,15 @@ public class Main {
 		list_face.add(new Face(h));
 		list_face.add(new Face(h));
 	}
-
+	//O(n+m)
 	private static void calcul_frag() {
 		list_frag.clear();
+		//O(n+m)
 		Graphe inter = g.diff(h);
+		//O(n+m)
 		List<List<Sommet>> comp_con = inter.calcul_comp_connexe();
 
+		//O(m)
 		// on rétablit la non orientation des fragments
 		for (List<Sommet> list : comp_con) {
 			for (Sommet sommet : list) {
@@ -81,6 +90,7 @@ public class Main {
 				}
 			}
 		}
+		//O(m)
 		// ajouter les arêtes solo
 		List<Sommet> list;
 		for (Sommet som : g.sommets.values()) {
@@ -88,6 +98,7 @@ public class Main {
 				for (Sommet voi : som.getVoisins()) {
 					if (h.have_sommet(voi)) {
 						if (!h.have_edge(som, voi)) {
+							//O(1) (un seul voisin)
 							inter.ajouterVoisins(som.getNum_sommet(), voi.getNum_sommet());
 							list = new ArrayList<Sommet>();
 							list.add(som);
@@ -98,10 +109,10 @@ public class Main {
 				}
 			}
 		}
-
+		// O(m)
 		// création des fragments
 		comp_con.forEach(x -> list_frag.add(new Fragment(x)));
-
+		// O(m)
 		// définition des sommets de contact pour chaque fragment
 		list_frag.forEach(x -> x.def_contact(h));
 	}

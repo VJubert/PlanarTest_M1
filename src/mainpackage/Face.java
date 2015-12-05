@@ -24,15 +24,17 @@ public class Face {
 	@Override
 	public String toString() {
 		String s = "";
+		//O(n)
 		for (Sommet sommet : sommets) {
 			s += sommet.getNum_sommet() + " ";
 		}
 		return s;
 	}
-
+	//O(n)
 	public Face maj(List<Sommet> chemin) {
 		Sommet x = chemin.get(0);
 		Sommet y = chemin.get(chemin.size() - 1);
+		//O(n)
 		//Si besoin on inverse le chemin
 		for (Sommet sommet : sommets) {
 			if (sommet.equals(x))
@@ -44,7 +46,7 @@ public class Face {
 				break;
 			}
 		}
-
+		//O(n)
 		Iterator<Sommet> it = sommets.iterator();
 		Sommet a;
 		boolean avant = true;
@@ -67,14 +69,18 @@ public class Face {
 			if (a.equals(y))
 				avant = true;
 		}
+		//O(n)
 		//on ajoute le chemin dans la seconde face
 		chemin = reverseList(chemin);
+		//O(n)
 		for (Sommet sommet : chemin) {
 			if (!(sommet.equals(x) || sommet.equals(y))) {
 				t2.add(sommet);
 			}
 		}
+		//O(n)
 		t1 = removeDouble(t1);
+		//O(n)
 		t2 = removeDouble(t2);
 
 		sommets = t1;
