@@ -58,9 +58,10 @@ public class Fragment extends Graphe {
 	public List<Face> getFace() {
 		return face;
 	}
+	//O(n+m)
 	public int calcul_face_admissible(List<Face> list_face) {
 		face.clear();
-		//O(m)
+		//O(n+m)
 		for (Face f : list_face) {
 			if (f.getSommets().containsAll(contact))
 				face.add(f);

@@ -33,15 +33,15 @@ public class Main {
 		h = g.createH();
 		init_face();
 		boolean une_seul_face = false;
-		//O(m3+n)
+		//O((n+m)3)
 		while (g.has_frag(h)) {
 			//O(n+m)
 			calcul_frag();
 			une_seul_face = false;
-			//O(m²+n)
+			//O((n+m)²)
 			for (Fragment frag : list_frag) {
 				if (!une_seul_face) {
-					//O(m)
+					//O(n+m)
 					int nb_face_admissible = frag.calcul_face_admissible(list_face);
 					switch (nb_face_admissible) {
 					case 0:
