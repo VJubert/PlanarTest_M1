@@ -23,6 +23,10 @@ public class Graphe {
 		sommets = g;
 	}
 
+	public Graphe() {
+		sommets = new HashMap<Integer, Sommet>();
+	}
+
 	public int getNb_sommets() {
 		return nb_sommets;
 	}
@@ -52,13 +56,14 @@ public class Graphe {
 	@Override
 	public String toString() {
 		String s = "";
-		//O(n)
+		// O(n)
 		for (Sommet so : sommets.values()) {
 			s += so + System.getProperty("line.separator");
 		}
 		return s;
 	}
-	//O(n+m)
+
+	// O(n+m)
 	public void parcours_largeur(int dep) {
 		ArrayDeque<Sommet> q = new ArrayDeque<Sommet>();
 		cleanProperties();
@@ -83,10 +88,11 @@ public class Graphe {
 	}
 
 	private void cleanProperties() {
-		//O(n)
-		sommets.values().forEach(x->x.cleanProperties());
+		// O(n)
+		sommets.values().forEach(x -> x.cleanProperties());
 	}
-	//O(n+m)
+
+	// O(n+m)
 	public void parcours_profondeur(int dep) {
 		cleanProperties();
 		visiter(dep);
@@ -104,18 +110,11 @@ public class Graphe {
 		s.setEtat(Etat.Traite);
 	}
 
-	public boolean calculCycle(Sommet u, Graphe h) {
-		cycle = new ArrayList<Sommet>();
-		cleanProperties();
-		boolean b = calculCycleRec(u);
-		return b;
-	}
-	
 	public Graphe createH() {
 		int cyclesize = cycle.size();
 		Graphe h = new Graphe(cyclesize);
 		int prec, here;
-		//O(n)
+		// O(n)
 		for (int i = 1; i < cyclesize; i++) {
 			prec = cycle.get(i - 1).getNum_sommet();
 			here = cycle.get(i).getNum_sommet();
@@ -123,6 +122,13 @@ public class Graphe {
 			h.ajouterVoisins(here, prec);
 		}
 		return h;
+	}
+
+	public boolean calculCycle(Sommet u, Graphe h) {
+		cycle = new ArrayList<Sommet>();
+		cleanProperties();
+		boolean b = calculCycleRec(u);
+		return b;
 	}
 
 	private boolean calculCycleRec(Sommet u) {
@@ -155,15 +161,16 @@ public class Graphe {
 		cycle.clear();
 		return false;
 	}
-	//O(m)
-	public void ajouterVoisins(int sommet, int... voisin) {
+
+	// O(m)
+	public boolean ajouterVoisins(int sommet, int... voisin) {
 		Sommet s = sommets.get(sommet);
 		if (s == null) {
 			s = new Sommet(sommet);
 			sommets.put(sommet, s);
 		}
 		Sommet s2;
-		//O(m)
+		// O(m)
 		for (int i : voisin) {
 			s2 = sommets.get(i);
 			if (s2 == null) {
@@ -172,11 +179,21 @@ public class Graphe {
 			}
 			s.ajouterVoisins(s2);
 		}
+		return true;
+	}
+
+	public boolean addSommet(int n) {
+		Sommet s = sommets.get(n);
+		if (s == null) {
+			sommets.put(n, new Sommet(n));
+			return true;
+		} else
+			return false;
 	}
 
 	public boolean has_frag(Graphe h) {
 		boolean cpt = false;
-		//O(m)
+		// O(m)
 		for (Sommet sommet_x : sommets.values()) {
 			for (Sommet sommet_y : sommet_x.getVoisins()) {
 				if (!(h.have_edge(sommet_x, sommet_y) || h.have_edge(sommet_y, sommet_x))) {
@@ -199,21 +216,23 @@ public class Graphe {
 	public boolean have_sommet(Sommet x) {
 		return sommets.get(x.getNum_sommet()) != null;
 	}
-	//O(n)
+
+	// O(n)
 	public void ajouterchemin(List<Sommet> chemin) {
 		int n = chemin.size();
 		Sommet x, y;
-		//O(n)
+		// O(n)
 		for (int i = 0; i < n - 1; i++) {
 			x = chemin.get(i);
 			y = chemin.get(i + 1);
-			//O(1) car un seul voisin
+			// O(1) car un seul voisin
 			ajouterVoisins(x.getNum_sommet(), y.getNum_sommet());
 			ajouterVoisins(y.getNum_sommet(), x.getNum_sommet());
 		}
 
 	}
-	//O(n+m)
+
+	// O(n+m)
 	public List<List<Sommet>> calcul_comp_connexe() {
 		cleanProperties();
 		Deque<Sommet> stack = new ArrayDeque<Sommet>();
@@ -221,7 +240,7 @@ public class Graphe {
 		List<List<Sommet>> comp = new ArrayList<List<Sommet>>();
 		List<Sommet> current_comp;
 		Sommet dep, peek;
-		//O(n+m)
+		// O(n+m)
 		while (!non_traite.isEmpty()) {
 			dep = non_traite.pop();
 			if (!dep.have_voisins()) {
@@ -251,13 +270,13 @@ public class Graphe {
 
 	public Graphe diff(Graphe h) {
 		Graphe inter = new Graphe(nb_sommets);
-		//O(n+m)
+		// O(n+m)
 		// Création du graphe This/H
 		for (Sommet sommet : sommets.values()) {
 			if (h.have_sommet(sommet))
 				inter.ajouterVoisins(sommet.getNum_sommet());
 			else {
-				//O(m)
+				// O(m)
 				for (Sommet voisins : sommet.getVoisins()) {
 					inter.ajouterVoisins(sommet.getNum_sommet(), voisins.getNum_sommet());
 				}
